@@ -5,7 +5,7 @@ enum shapeColors {
   CRIMSON = '#D9045D',
   GRAY = '#EEEEF5',
   FLESH = '#FFF0C0',
-  NAVYBLUE = '#0F588C'
+  NAVYBLUE = '#0F588C',
 }
 
 const startShapeMatrix = {
@@ -13,32 +13,32 @@ const startShapeMatrix = {
   BLUE: [
     [1, 1],
     [1, 0],
-    [1, 0]
+    [1, 0],
   ],
   RED: [
     [1, 1],
     [0, 1],
-    [0, 1]
+    [0, 1],
   ],
   CRIMSON: [
     [1, 1],
-    [1, 1]
+    [1, 1],
   ],
   GRAY: [
     [1, 0],
     [1, 1],
-    [0, 1]
+    [0, 1],
   ],
   FLESH: [
     [0, 1],
     [1, 1],
-    [1, 0]
+    [1, 0],
   ],
   NAVYBLUE: [
     [1, 0],
     [1, 1],
-    [1, 0]
-  ]
+    [1, 0],
+  ],
 }
 
 const LINE_SCORE = 100
@@ -51,6 +51,7 @@ export type CanvasAPIType = {
   element: HTMLCanvasElement
   setScore: ({ score, speed }: { score: number; speed: number }) => void
   setGameEnd: (b: boolean) => void
+  setNextShape: (a: string) => void
 }
 
 class CanvasAPI {
@@ -64,20 +65,25 @@ class CanvasAPI {
   private animId = 0
   private fieldMatrix: string[][] = []
   private shapeMatrix: number[][] = []
+  private nextShapeMatrix: number[][] = []
   private shapeColor = ''
+  private nextShapeColor = ''
+  private nextShapeName = ''
   private gameState = false
   private score = 0
   private setScore
   private setGameEnd
+  private setNextShape
   private speed = 0
 
-  constructor({ element, setScore, setGameEnd }: CanvasAPIType) {
+  constructor({ element, setScore, setGameEnd, setNextShape }: CanvasAPIType) {
     this.context = element?.getContext('2d') as CanvasRenderingContext2D
     this.width = element?.width
     this.height = element?.height
     this.x = this.width / 2
     this.setScore = setScore
     this.setGameEnd = setGameEnd
+    this.setNextShape = setNextShape
 
     for (let i = 0; i < this.height / this.squareWidth; i++) {
       const subArr: string[] = []
@@ -87,7 +93,6 @@ class CanvasAPI {
       this.fieldMatrix.push(subArr)
     }
   }
-
   startGame() {
     if (!this.gameState) {
       this.gameState = true
@@ -122,11 +127,11 @@ class CanvasAPI {
     )
   }
 
-  private animation(startTime: number, animationTime: number) {
+  private animation(startTime: number) {
     let stopAnim = false
     const time = performance.now()
     const shift = time - startTime
-    const multiply = shift / animationTime
+    const multiply = shift / this.animTime
     const length = this.height - this.shapeMatrix.length * this.squareWidth
     this.y = length * multiply
     const currentMatrixPosY = Math.floor(this.y / this.squareWidth)
@@ -163,9 +168,7 @@ class CanvasAPI {
       }
 
       if (!stopAnim) {
-        this.animId = requestAnimationFrame(() =>
-          this.animation(startTime, animationTime)
-        )
+        this.animId = requestAnimationFrame(() => this.animation(startTime))
       }
     } else {
       stopAnim = true
@@ -224,8 +227,9 @@ class CanvasAPI {
     }
   }
 
-  private gameOver() {
+  gameOver() {
     let isGameOver = false
+    cancelAnimationFrame(this.animId)
     for (let i = 0; i < this.fieldMatrix[0].length; i++) {
       if (this.fieldMatrix[0][i] !== '') {
         isGameOver = true
@@ -235,7 +239,63 @@ class CanvasAPI {
     return isGameOver
   }
 
+  private drawNextObject() {
+    const index = Math.floor(Math.random() * 7)
+
+    switch (index) {
+      case 0:
+        this.nextShapeColor = shapeColors.YELLOW
+        this.nextShapeMatrix = startShapeMatrix.YELLOW
+        this.nextShapeName = 'yellow'
+        break
+      case 1:
+        this.nextShapeColor = shapeColors.BLUE
+        this.nextShapeMatrix = startShapeMatrix.BLUE
+        this.nextShapeName = 'blue'
+        break
+      case 2:
+        this.nextShapeColor = shapeColors.RED
+        this.nextShapeMatrix = startShapeMatrix.RED
+        this.nextShapeName = 'red'
+        break
+      case 3:
+        this.nextShapeColor = shapeColors.CRIMSON
+        this.nextShapeMatrix = startShapeMatrix.CRIMSON
+        this.nextShapeName = 'crimson'
+        break
+      case 4:
+        this.nextShapeColor = shapeColors.GRAY
+        this.nextShapeMatrix = startShapeMatrix.GRAY
+        this.nextShapeName = 'gray'
+        break
+      case 5:
+        this.nextShapeColor = shapeColors.FLESH
+        this.nextShapeMatrix = startShapeMatrix.FLESH
+        this.nextShapeName = 'flesh'
+        break
+      case 6:
+        this.nextShapeColor = shapeColors.NAVYBLUE
+        this.nextShapeMatrix = startShapeMatrix.NAVYBLUE
+        this.nextShapeName = 'navyblue'
+        break
+    }
+
+    if (this.nextShapeName) {
+      this.setNextShape(this.nextShapeName)
+    }
+  }
+
   private drawObjects() {
+    if (this.nextShapeMatrix && this.nextShapeColor) {
+      this.shapeMatrix = this.nextShapeMatrix
+      this.shapeColor = this.nextShapeColor
+      this.drawNextObject()
+      this.animation(performance.now())
+
+      return
+    }
+
+    this.drawNextObject()
     const index = Math.floor(Math.random() * 7)
 
     switch (index) {
@@ -269,7 +329,7 @@ class CanvasAPI {
         break
     }
 
-    this.animation(performance.now(), this.animTime)
+    this.animation(performance.now())
   }
 
   private drawShape(positionX: number, positionY: number) {

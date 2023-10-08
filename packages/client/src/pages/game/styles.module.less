@@ -52,7 +52,29 @@
     color: @blue;
     font-size: 24px;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
     right: 30px;
     top: 100px;
+  }
+
+  &__countdown {
+    position: absolute;
+    font-size: 50px;
+    color: @blue_text;
+    font-weight: 700;
+  }
+
+  &__nextBlock {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  &__btnBack {
+    width: 100%;
+    .button-mixin('default');
   }
 }
