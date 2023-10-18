@@ -1,9 +1,11 @@
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+import { store } from './services/store'
+import { Provider } from 'react-redux'
 import '@styles/styles.less'
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && !(import.meta as any).env.DEV) {
   window.addEventListener('load', () => {
     const SW = new URL('../sw.js', import.meta.url).href
     navigator.serviceWorker
@@ -21,7 +23,9 @@ if ('serviceWorker' in navigator) {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
 )

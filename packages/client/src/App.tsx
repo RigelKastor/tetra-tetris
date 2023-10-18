@@ -8,6 +8,8 @@ import Preloader from '@components/Preloader/Preloader'
 import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
 import { baseApiUrl } from '@/api/api'
+import { useDispatch } from 'react-redux'
+import { setUserData } from '@/services/userSlice'
 
 const resourcesUrl = baseApiUrl + 'resources'
 
@@ -17,11 +19,13 @@ function App() {
   const [isFetcing, setIsFetching] = useState(true)
   const navigate = useNavigate()
   const activePage = window.location.pathname.substring(1).split('/')[0]
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       await getUserInfo()
         .then(result => {
+          dispatch(setUserData(result))
           setUserInfo(result)
           if (activePage === 'login' || activePage === 'registration') {
             navigate(urls.home)
