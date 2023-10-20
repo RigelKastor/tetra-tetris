@@ -2,7 +2,7 @@ import { Button, Form, Modal, Upload, message } from 'antd'
 import { FC, useCallback, useContext, useEffect, useState } from 'react'
 import Avatar from '../Avatar/Avatar'
 import { putUserAvatar } from '@/api/user'
-import { useForm } from 'antd/es/form/Form'
+import { useForm } from 'antd/lib/form/Form'
 import UserContext from '@/providers/userProvider/UserContext'
 
 type ChangeAvatarProps = {

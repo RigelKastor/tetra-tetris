@@ -9,7 +9,7 @@ import classes from './styles.module.less'
 import { Button, ColProps, Form, Input, Modal } from 'antd'
 import Avatar from '@/components/Avatar/Avatar'
 import UserContext from '@/providers/userProvider/UserContext'
-import { useForm } from 'antd/es/form/Form'
+import { useForm } from 'antd/lib/form/Form'
 import {
   PasswordRequest,
   UserProfile,

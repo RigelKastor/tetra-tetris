@@ -18,27 +18,26 @@ function App() {
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
   const [isFetcing, setIsFetching] = useState(true)
   const navigate = useNavigate()
-  const activePage = window.location.pathname.substring(1).split('/')[0]
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      await getUserInfo()
-        .then(result => {
-          dispatch(setUserData(result))
-          setUserInfo(result)
-          if (activePage === 'login' || activePage === 'registration') {
-            navigate(urls.home)
-          }
-          setIsFetching(false)
-        })
-        .catch(error => {
-          setGetUserError(error)
-          setIsFetching(false)
-        })
-    }
-    fetchUserInfo()
-  }, [])
+  // const activePage = window.location.pathname.substring(1).split('/')[0]
+
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     await getUserInfo()
+  //       .then(result => {
+  //         setUserInfo(result)
+  //         if (activePage === 'login' || activePage === 'registration') {
+  //           navigate(urls.home)
+  //         }
+  //         setIsFetching(false)
+  //       })
+  //       .catch(error => {
+  //         setGetUserError(error)
+  //         setIsFetching(false)
+  //       })
+  //   }
+  //   fetchUserInfo()
+  // }, [])
 
   return (
     <React.StrictMode>
