@@ -20,7 +20,8 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <BrowserRouter>
     <App />
   </BrowserRouter>
