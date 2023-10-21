@@ -6,6 +6,7 @@ import {
 } from '@pages/leaderboard/leader-users-mock'
 import classes from './styles.module.less'
 import Avatar from '@components/Avatar/Avatar'
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
 
 const LeaderboardPage = () => {
   return (
@@ -13,11 +14,13 @@ const LeaderboardPage = () => {
       <>
         <div className={classes.leadersCardWrapper}>
           {leadersMock.map(item => (
-            <LeaderCard
-              user={item}
-              className={classes.leadersCardWrapper__card}
-              key={`leader_card_${item.position}`}
-            />
+            <ErrorBoundary>
+              <LeaderCard
+                user={item}
+                className={classes.leadersCardWrapper__card}
+                key={`leader_card_${item.position}`}
+              />
+            </ErrorBoundary>
           ))}
         </div>
         <div className={classes.leaderboardTableWrapper}>
