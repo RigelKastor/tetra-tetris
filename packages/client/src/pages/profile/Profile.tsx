@@ -18,6 +18,8 @@ import {
 } from '@/api/user'
 import { ChangeAvatar } from '@/components/ChangeAvatar/ChangeAvatar'
 import PageFrame from '@/components/PageFrame/PageFrame'
+import { validate } from '@/utils/validators'
+import { RuleObject } from 'antd/es/form'
 
 interface FieldData {
   name: string | number | (string | number)[]
@@ -98,40 +100,78 @@ const Profile: React.FC = () => {
           onOk={onAvatarChanged}
         />
         <div className={classes.profile__form}>
-          <Form fields={profileFields} onFinish={changeProfileData}>
+          <Form
+            fields={profileFields}
+            onFinish={changeProfileData}
+            validateTrigger={['onBlur', 'onSubmit']}>
             <Form.Item
               labelCol={memoizedProps}
               colon={false}
               label={<span>First name</span>}
-              name="first_name">
+              name="first_name"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('name', value)
+                  },
+                },
+              ]}>
               <Input placeholder="First name" />
             </Form.Item>
             <Form.Item
               labelCol={memoizedProps}
               colon={false}
               label={<span>Second name</span>}
-              name="second_name">
+              name="second_name"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('name', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Second name" />
             </Form.Item>
             <Form.Item
               labelCol={memoizedProps}
               colon={false}
               label={<span>Login</span>}
-              name="login">
+              name="login"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('login', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Login" />
             </Form.Item>
             <Form.Item
               labelCol={memoizedProps}
               colon={false}
               label={<span>Email</span>}
-              name="email">
+              name="email"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('email', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Email" type="email" />
             </Form.Item>
             <Form.Item
               labelCol={memoizedProps}
               colon={false}
               label={<span>Phone</span>}
-              name="phone">
+              name="phone"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('phone', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Phone" />
             </Form.Item>
             <Form.Item
