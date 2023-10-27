@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import ErrorMessage from '@components/ErrorMesage/ErrorMessage'
@@ -6,11 +6,17 @@ import { postLoginUser, SignInType } from '@/api/auth'
 import { urls } from '@/utils/navigation'
 import classes from '../signUp/styles.module.less'
 import TetrisImg from '../../components/TetrisImg/Tetris'
+import { getServiceId, getYandexUrl } from '@/api/oauth'
 
 const Login: React.FC = () => {
   const [authError, setAuthError] = useState<string | null>(null)
   const navigate = useNavigate()
-
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get('code')
+    if (code) {
+      console.log(code)
+    }
+  }, [])
   const submitForm = useCallback((values: SignInType) => {
     if (values.login && values.password) {
       setAuthError(null)
@@ -22,6 +28,11 @@ const Login: React.FC = () => {
           setAuthError(error.description)
         })
     }
+  }, [])
+
+  const oAuth = useCallback(async () => {
+    const clientId = await getServiceId()
+    window.location.replace(getYandexUrl(clientId))
   }, [])
 
   return (
@@ -62,6 +73,15 @@ const Login: React.FC = () => {
             Don’t have an account?
           </Button>
         </Form>
+        <span>or</span>
+        <button
+          onClick={oAuth}
+          className={classes.signUp__btn}
+          style={{
+            width: '100%',
+          }}>
+          Login via Yandex
+        </button>
       </div>
     </div>
   )

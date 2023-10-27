@@ -7,11 +7,9 @@ import { UserType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
 import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
-import { baseApiUrl } from '@/api/api'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '@/services/userSlice'
-
-const resourcesUrl = baseApiUrl + 'resources'
+import { signInWithYandex } from './api/oauth'
 
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
@@ -22,6 +20,11 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get('code')
+    if (code) {
+      console.log(code)
+      signInWithYandex(code).catch(x => console.log(x))
+    }
     const fetchUserInfo = async () => {
       await getUserInfo()
         .then(result => {
