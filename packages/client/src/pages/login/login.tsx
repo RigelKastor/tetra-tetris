@@ -63,24 +63,23 @@ const Login: React.FC = () => {
             }}>
             Login
           </button>
-          <Button
-            href={urls.signup}
-            type="link"
-            style={{
-              width: '100%',
-            }}>
-            Don’t have an account?
-          </Button>
         </Form>
-        <span>or</span>
         <button
           onClick={oAuth}
-          className={classes.signUp__btn}
+          className={classes.yandex_button}
           style={{
             width: '100%',
           }}>
           Login via Yandex
         </button>
+        <Button
+          href={urls.signup}
+          type="link"
+          style={{
+            width: '100%',
+          }}>
+          Don’t have an account?
+        </Button>
       </div>
     </div>
   )
