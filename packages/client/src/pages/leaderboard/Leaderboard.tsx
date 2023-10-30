@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import PageFrame from '@components/PageFrame/PageFrame'
 import LeaderCard from '@components/LeaderCard/LeaderCard'
 import {
@@ -7,8 +8,14 @@ import {
 import classes from './styles.module.less'
 import Avatar from '@components/Avatar/Avatar'
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
+import { getLeaderboard } from '@/api/leaderboardApi'
 
 const LeaderboardPage = () => {
+  const leaders = useMemo(async () => {
+    const result = await getLeaderboard()
+    console.log('=result', result)
+    return
+  }, [])
   return (
     <PageFrame pageType="leaderboard">
       <>
