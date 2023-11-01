@@ -21,11 +21,11 @@ function App() {
 
   useEffect(() => {
     const code = new URLSearchParams(window.location.search).get('code')
-    if (code) {
-      console.log(code)
-      signInWithYandex(code).catch(x => console.log(x))
-    }
+
     const fetchUserInfo = async () => {
+      if (code) {
+        await signInWithYandex(code).catch(x => console.log(x))
+      }
       await getUserInfo()
         .then(result => {
           dispatch(setUserData(result))
