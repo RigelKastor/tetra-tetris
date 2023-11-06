@@ -14,7 +14,7 @@ COPY packages /app/packages
 
 RUN yarn install
 RUN yarn lerna bootstrap
-RUN rm -rf /app/packages/server/dist/ && rm -rf /app/packages/client/dist/ && cd packages/client && yarn build:ssr && yarn build
+RUN rm -rf /app/packages/server/dist/ && rm -rf /app/packages/client/dist/ && rm -rf /app/packages/client/client-dist/ && cd packages/client && yarn build:ssr && yarn build
 
 
 # FROM node:$NODE_VERSION-buster-slim as production
