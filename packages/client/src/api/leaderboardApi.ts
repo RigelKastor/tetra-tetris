@@ -1,28 +1,34 @@
 import { yandexApi } from '@/api/setupApi'
 import { UserType } from '@components/types'
+import { resourcesUrl } from '@/utils/constants'
 
 const RATING_FIELD_NAME = 'tetraTetris'
 
 export const getUserInfo = (id: number) => {
   return yandexApi
     .get(`user/${id}`)
-    .then(res => res.data)
+    .then(res => ({
+      ...res.data,
+      avatar: res.data.avatar ? `${resourcesUrl}${res.data.avatar}` : null,
+    }))
     .catch(reason => {
       console.log(reason)
       return {}
     })
 }
 
+type LeaderTypeData = {
+  tetraTetris: number
+  userId: number
+}
+
 type LeaderType = {
-  data: {
-    tetraTetris: number
-    userId: number
-  }
+  data: LeaderTypeData
   ratingFieldName: string
   teamName: string
 }
 
-type LeaderUserInfoType = {
+export type LeaderUserInfoType = {
   user: UserType
   score: number
 }
@@ -35,20 +41,12 @@ export const getLeaderboard = () => {
   }
   return yandexApi
     .post('leaderboard/all', data)
-    .then(res => {
-      const leaderUsers: LeaderUserInfoType[] = []
-      res.data.forEach(async (user: LeaderType) => {
-        console.log('=user', user)
-        const userInfo = await getUserInfo(user.data.userId)
-        if (userInfo) {
-          leaderUsers.push({ user: userInfo, score: user.data.tetraTetris })
-        }
-      })
-
-      console.log('=leaderUsers', leaderUsers)
-
-      return leaderUsers
-    })
+    .then(result =>
+      result.data.map((item: LeaderType) => ({
+        userId: item.data.userId,
+        score: item.data.tetraTetris,
+      }))
+    )
     .catch(reason => {
       console.log(reason)
       return []

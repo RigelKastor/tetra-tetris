@@ -61,10 +61,6 @@ const Game: React.FC = () => {
     setNextShape('')
   }
 
-  if (user) {
-    saveGameResult(600, 1347594)
-  }
-
   const content = useMemo(() => {
     if (isGameEnded) {
       if (user) {
