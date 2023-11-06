@@ -5,8 +5,6 @@ FROM node:$NODE_VERSION-buster-slim as base
 
 WORKDIR /app
 
-# FROM base as builder
-
 COPY lerna.json init.js ./
 COPY package.json yarn.lock ./
 
@@ -14,15 +12,7 @@ COPY packages /app/packages
 
 RUN yarn install
 RUN yarn lerna bootstrap
-RUN rm -rf /app/packages/server/dist/ && rm -rf /app/packages/client/dist/ && rm -rf /app/packages/client/client-dist/ && cd packages/client && yarn build:ssr && yarn build
-
-
-# FROM node:$NODE_VERSION-buster-slim as production
-# WORKDIR /app
-
-# COPY --from=builder /app/packages/server/dist/ /app/server/dist
-# COPY --from=builder /app/packages/client/dist/ /app/client/dist
-# COPY --from=builder /app/packages/client/ssr-dist/ /app/client/ssr-dist
+RUN cd packages/client && yarn build:ssr && yarn build
 
 EXPOSE $SERVER_PORT
 CMD ls -la && cd packages/server && yarn dev
