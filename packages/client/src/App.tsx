@@ -7,41 +7,37 @@ import { UserType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
 import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
+import { baseApiUrl } from '@/api/api'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '@/services/userSlice'
-import { signInWithYandex } from './api/oauth'
+
+const resourcesUrl = baseApiUrl + 'resources'
 
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
   const [isFetcing, setIsFetching] = useState(true)
   const navigate = useNavigate()
-  const activePage = window.location.pathname.substring(1).split('/')[0]
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get('code')
+  // const activePage = window.location.pathname.substring(1).split('/')[0]
 
-    const fetchUserInfo = async () => {
-      if (code) {
-        await signInWithYandex(code).catch(x => console.log(x))
-      }
-      await getUserInfo()
-        .then(result => {
-          dispatch(setUserData(result))
-          setUserInfo(result)
-          if (activePage === 'login' || activePage === 'registration') {
-            navigate(urls.home)
-          }
-          setIsFetching(false)
-        })
-        .catch(error => {
-          setGetUserError(error)
-          setIsFetching(false)
-        })
-    }
-    fetchUserInfo()
-  }, [])
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     await getUserInfo()
+  //       .then(result => {
+  //         setUserInfo(result)
+  //         if (activePage === 'login' || activePage === 'registration') {
+  //           navigate(urls.home)
+  //         }
+  //         setIsFetching(false)
+  //       })
+  //       .catch(error => {
+  //         setGetUserError(error)
+  //         setIsFetching(false)
+  //       })
+  //   }
+  //   fetchUserInfo()
+  // }, [])
 
   return (
     <React.StrictMode>

@@ -4,6 +4,7 @@ import classes from './styles.module.less'
 import GameStartMenu from './components/GameStartMenu'
 import GameEnd from './components/GameEnd'
 import useGameApi from '@/hooks/useGameApi'
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
 import { exitFullscreen, requestFullscreen } from '@/utils/requestFullscreen'
 
 const Game: React.FC = () => {
@@ -79,12 +80,14 @@ const Game: React.FC = () => {
         {startCountdown && (
           <span className={classes.game__countdown}>{startCountdown}</span>
         )}
-        <canvas
-          ref={canvasRef}
-          width="420"
-          height="600"
-          className={classes.game__field}
-        />
+        <ErrorBoundary fallback={<p>Игра не доступна</p>}>
+          <canvas
+            ref={canvasRef}
+            width="420"
+            height="600"
+            className={classes.game__field}
+          />
+        </ErrorBoundary>
         <div className={classes.game__score}>
           <button
             className={classes.game__btnBack}

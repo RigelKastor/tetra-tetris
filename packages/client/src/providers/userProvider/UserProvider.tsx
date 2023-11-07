@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react'
 import UserContext from './UserContext'
-import { UserType } from '@components/types'
-import { baseApiUrl } from '@/api/api'
-import { DEFAULT_AVATAR } from '@/utils/constants'
+import { UserType } from '../../components/types'
+import { baseApiUrl } from '../../api/api'
+import { DEFAULT_AVATAR } from '../../utils/constants'
 
 interface UserContextProps {
   children?: ReactNode
