@@ -62,7 +62,6 @@ async function startServer() {
 
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
-    console.log(url)
 
     try {
       let template: string
@@ -93,8 +92,6 @@ async function startServer() {
 
       // Inject the app-rendered HTML into the template.
       const html = template.replace('<!--ssr-outlet-->', appHtml)
-      // console.log(store)
-      // console.log(html)
 
       // Send the rendered HTML back.
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)

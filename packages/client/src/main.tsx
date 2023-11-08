@@ -22,14 +22,6 @@ if ('serviceWorker' in navigator && !(import.meta as any).env.DEV) {
   })
 }
 
-// console.log(store)
-
-// declare global {
-//   interface Window {
-//     __PRELOADED_STATE__?: object;
-//   }
-// }
-
 ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <Provider store={store}>
