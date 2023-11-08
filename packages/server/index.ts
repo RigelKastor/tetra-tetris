@@ -6,6 +6,7 @@ import { createClientAndConnect } from './db'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import express from 'express'
+import { store } from './service/store'
 
 dotenv.config()
 
@@ -15,11 +16,14 @@ const isDev = () => process.env.NODE_ENV === 'development' // определяе
 
 async function startServer() {
   const app = express()
+
   const clientPath = path.dirname(
     require.resolve('client/client-dist/index.html')
   ) // путь к клиентскому билду
+
   const srcPath = path.dirname(require.resolve('client')) // путь к исходникам
   const ssrPath = require.resolve('client/ssr-dist/client.cjs') //путь к серверному билду
+
   let vite: ViteDevServer | undefined // инициализируем вит
   const port = Number(process.env.SERVER_PORT) || 3000
 
@@ -53,29 +57,27 @@ async function startServer() {
   })
 
   if (!isDev()) {
-    // подключаем статику
     app.use('/assets', express.static(path.resolve(clientPath, 'assets')))
   }
 
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
+    console.log(url)
 
     try {
       let template: string
       if (!isDev()) {
-        // если прод режим, то берем готовый билд для прода (clientPath)
         template = fs.readFileSync(
           path.resolve(clientPath, 'index.html'),
           'utf-8'
         )
       } else {
-        // если дев режим, берем исходники
         template = fs.readFileSync(path.resolve(srcPath, 'index.html'), 'utf-8')
 
         template = await vite!.transformIndexHtml(url, template)
       }
 
-      let render: (url: string) => Promise<string>
+      let render: (url: string, store: any) => Promise<string>
       if (!isDev()) {
         render = (await import(ssrPath)).render
       } else {
@@ -87,10 +89,12 @@ async function startServer() {
       }
 
       // вызываем метод рендер и прокидываем путь. Из client/ssr.tsx
-      const appHtml = await render(url)
+      const appHtml = await render(url, store)
 
       // Inject the app-rendered HTML into the template.
       const html = template.replace('<!--ssr-outlet-->', appHtml)
+      // console.log(store)
+      // console.log(html)
 
       // Send the rendered HTML back.
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)

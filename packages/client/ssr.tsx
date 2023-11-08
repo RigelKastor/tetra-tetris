@@ -3,14 +3,13 @@ import App from './src/App'
 import { StaticRouter } from 'react-router-dom/server'
 import ReactDOMServer from 'react-dom/server'
 import { Provider } from 'react-redux'
-import { store } from './src/services/store'
 
-export function render(uri) {
+export function render(uri, store) {
   return ReactDOMServer.renderToString(
-    <StaticRouter location={uri}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <StaticRouter location={uri}>
         <App />
-      </Provider>
-    </StaticRouter>
+      </StaticRouter>
+    </Provider>
   )
 }
