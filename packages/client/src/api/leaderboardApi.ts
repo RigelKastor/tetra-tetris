@@ -4,7 +4,7 @@ import { resourcesUrl } from '@/utils/constants'
 
 const RATING_FIELD_NAME = 'tetraTetris'
 
-export const getUserInfo = (id: number) => {
+export const getGamersInfo = (id: number) => {
   return yandexApi
     .get(`user/${id}`)
     .then(res => ({

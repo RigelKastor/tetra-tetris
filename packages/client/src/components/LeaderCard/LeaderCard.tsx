@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import classes from './styles.module.less'
 import Avatar from '@components/Avatar/Avatar'
 import classNames from 'classnames'
-import { getUserInfo } from '@/api/leaderboardApi'
+import { getGamersInfo } from '@/api/leaderboardApi'
 import { LeaderUserType, PositionType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
 
@@ -24,7 +24,7 @@ const positionTitle = {
 const LeaderCard = ({ user, score, position, className }: LeaderCardProps) => {
   const [cardState, setCardState] = useState<LeaderUserType | null>(null)
   useEffect(() => {
-    getUserInfo(user).then(userInfo => {
+    getGamersInfo(user).then(userInfo => {
       if (userInfo) {
         setCardState({
           userId: user,
