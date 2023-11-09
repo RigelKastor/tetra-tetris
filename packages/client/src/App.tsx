@@ -7,6 +7,7 @@ import { UserType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
 import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
+import { signInWithYandex } from './api/oauth'
 
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
@@ -19,6 +20,10 @@ function App() {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      const code = new URLSearchParams(location.search).get('code')
+      if (code) {
+        await signInWithYandex(code).catch(error => console.log(error))
+      }
       await getUserInfo()
         .then(result => {
           setUserInfo(result)

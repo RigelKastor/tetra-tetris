@@ -21,7 +21,7 @@ async function startServer() {
   const srcPath = path.dirname(require.resolve('client')) // путь к исходникам
   const ssrPath = require.resolve('client/ssr-dist/client.cjs') //путь к серверному билду
   let vite: ViteDevServer | undefined // инициализируем вит
-  const port = Number(process.env.SERVER_PORT) || 3001
+  const port = Number(process.env.SERVER_PORT) || 3000
 
   app.use(cors())
 
