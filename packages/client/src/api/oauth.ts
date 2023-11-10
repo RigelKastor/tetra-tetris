@@ -15,6 +15,9 @@ export async function getServiceId() {
   return response.data.service_id
 }
 
-export async function signInWithYandex(code: string) {
-  await yandexApi.post('oauth/yandex', { code: code, redirectUri: redirectUri })
+export function signInWithYandex(code: string) {
+  return yandexApi.post('oauth/yandex', {
+    code: code,
+    redirectUri: redirectUri,
+  })
 }
