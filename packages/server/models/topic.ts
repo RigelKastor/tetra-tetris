@@ -8,7 +8,6 @@ import {
   Table,
 } from 'sequelize-typescript'
 import { Comment } from './comment'
-import { TopicReaction } from './reactions'
 
 @Table({
   timestamps: true,
