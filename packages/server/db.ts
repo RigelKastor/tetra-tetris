@@ -2,6 +2,8 @@ import { Topic } from './models/topic'
 import { User } from './models/user'
 import { Comment } from './models/comment'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
+import { TopicReaction } from './models/reactions'
+import { CommentReaction } from './models/reactions'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
@@ -21,7 +23,7 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
 
     const res = await sequelize.query('SELECT NOW()')
     console.log('  ➜ 🎸 Connected to the database at:', res)
-    sequelize.addModels([User, Topic, Comment])
+    sequelize.addModels([User, Topic, Comment, TopicReaction, CommentReaction])
     await sequelize.sync()
     return sequelize
   } catch (e) {

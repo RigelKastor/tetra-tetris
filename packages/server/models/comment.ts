@@ -9,6 +9,7 @@ import {
   Table,
 } from 'sequelize-typescript'
 import { Topic } from './topic'
+import { CommentReaction } from './reactions'
 
 @Table({
   timestamps: true,
@@ -44,4 +45,7 @@ export class Comment extends Model<Comment> {
 
   @HasMany(() => Comment, 'parent_id')
   comments: Comment[] | undefined
+
+  @HasMany(() => CommentReaction, 'comment_id')
+  reactions: CommentReaction[] | undefined
 }
