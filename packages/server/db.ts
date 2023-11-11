@@ -1,4 +1,4 @@
-import { User } from 'models/user'
+import { User } from './models/user'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
@@ -20,6 +20,7 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
     const res = await sequelize.query('SELECT NOW()')
     console.log('  ➜ 🎸 Connected to the database at:', res)
     sequelize.addModels([User])
+    await sequelize.sync()
     return sequelize
   } catch (e) {
     console.error(e)
