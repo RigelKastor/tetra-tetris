@@ -2,6 +2,8 @@ import UserModal from './forum/models/userModel'
 import TopicModal from './forum/models/topicModel'
 import CommentModal from './forum/models/commentModel'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
+import { TopicReaction } from './models/reactions'
+import { CommentReaction } from './models/reactions'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
@@ -21,6 +23,7 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
 
     const res = await sequelize.query('SELECT NOW()')
     console.log('  ➜ 🎸 Connected to the database at:', res)
+
     sequelize.addModels([UserModal, TopicModal, CommentModal])
     await sequelize.sync({ force: true })
     return sequelize
