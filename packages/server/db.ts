@@ -1,7 +1,6 @@
 import UserModal from './forum/models/userModel'
 import TopicModal from './forum/models/topicModel'
 import CommentModal from './forum/models/commentModel'
-import { Comment } from './models/сomment'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
