@@ -1,6 +1,6 @@
 import { Topic } from './models/topic'
 import { User } from './models/user'
-import { Comment } from './models/сomment'
+import { Comment } from './models/comment'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
