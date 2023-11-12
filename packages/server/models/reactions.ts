@@ -22,7 +22,7 @@ export class TopicReaction extends Model<TopicReaction> {
   @AllowNull(false)
   @AutoIncrement
   @Column(DataType.INTEGER)
-  reaction_id: number
+  override id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -47,7 +47,7 @@ export class CommentReaction extends Model<CommentReaction> {
   @AllowNull(false)
   @AutoIncrement
   @Column(DataType.INTEGER)
-  reaction_id!: number
+  override id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)

@@ -1,5 +1,6 @@
 import {
   AllowNull,
+  AutoIncrement,
   Column,
   DataType,
   HasMany,
@@ -18,8 +19,9 @@ import { TopicReaction } from './reactions'
 export class Topic extends Model<Topic> {
   @PrimaryKey
   @AllowNull(false)
+  @AutoIncrement
   @Column(DataType.INTEGER)
-  topic_id!: number
+  override id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)

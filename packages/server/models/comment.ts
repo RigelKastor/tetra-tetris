@@ -1,5 +1,6 @@
 import {
   AllowNull,
+  AutoIncrement,
   Column,
   DataType,
   ForeignKey,
@@ -19,8 +20,9 @@ import { CommentReaction } from './reactions'
 export class Comment extends Model<Comment> {
   @PrimaryKey
   @AllowNull(false)
+  @AutoIncrement
   @Column(DataType.INTEGER)
-  comment_id!: number
+  override id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -36,7 +38,7 @@ export class Comment extends Model<Comment> {
 
   @ForeignKey(() => Topic)
   @Column({ type: DataType.INTEGER, field: 'topic_id' })
-  topic!: Topic
+  topic_id: number
 
   @ForeignKey(() => Comment)
   @AllowNull(true)
