@@ -18,6 +18,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
+    "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "lib": ["DOM","es2019", "esnext.asynciterable"],
     "types": ["node", "jest"],
