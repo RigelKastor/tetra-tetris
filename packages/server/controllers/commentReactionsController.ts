@@ -1,5 +1,5 @@
 import type { Request, Response, Router } from 'express'
-import { CommentReaction, Reaction } from '../models/reactions'
+import { CommentReaction, Reaction } from '../forum/models/reactions'
 
 export function useCommentReactions(router: Router) {
   router.get('/topic/:topic_id/comments/:comment_id/reactions', (req, res) =>

@@ -1,5 +1,5 @@
 import type { Request, Response, Router } from 'express'
-import { Reaction, TopicReaction } from '../models/reactions'
+import { Reaction, TopicReaction } from '../forum/models/reactions'
 
 export function useReactionsApi(router: Router) {
   router.get('/topic/:topic_id/reactions', (req, res) =>
