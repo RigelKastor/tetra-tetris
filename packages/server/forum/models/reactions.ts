@@ -1,5 +1,6 @@
 import {
   AllowNull,
+  AutoIncrement,
   Column,
   DataType,
   ForeignKey,
@@ -7,7 +8,6 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript'
-import { Topic } from './topic'
 import { Comment } from './comment'
 
 export type Reaction = 'like' | 'dislike'
@@ -20,8 +20,9 @@ export type Reaction = 'like' | 'dislike'
 export class TopicReaction extends Model<TopicReaction> {
   @PrimaryKey
   @AllowNull(false)
+  @AutoIncrement
   @Column(DataType.INTEGER)
-  reaction_id!: number
+  reaction_id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)
@@ -31,10 +32,9 @@ export class TopicReaction extends Model<TopicReaction> {
   @Column(DataType.INTEGER)
   user_id!: number
 
-  @ForeignKey(() => Topic)
   @AllowNull(false)
-  @Column({ type: DataType.INTEGER, field: 'topic_id' })
-  topic!: Topic
+  @Column(DataType.INTEGER)
+  topic_id!: number
 }
 
 @Table({
@@ -45,19 +45,20 @@ export class TopicReaction extends Model<TopicReaction> {
 export class CommentReaction extends Model<CommentReaction> {
   @PrimaryKey
   @AllowNull(false)
+  @AutoIncrement
   @Column(DataType.INTEGER)
   reaction_id!: number
 
   @AllowNull(false)
   @Column(DataType.STRING)
-  reaction!: Reaction
+  reaction: Reaction
 
   @AllowNull(false)
   @Column(DataType.INTEGER)
-  user_id!: number
+  user_id: number
 
   @ForeignKey(() => Comment)
   @AllowNull(false)
-  @Column({ type: DataType.INTEGER, field: 'comment_id' })
-  comment!: Comment
+  @Column(DataType.INTEGER)
+  commentId: number
 }

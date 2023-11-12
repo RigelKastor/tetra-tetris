@@ -7,13 +7,18 @@ import { CommentReaction } from './models/reactions'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
-    const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-      process.env
+    console.log('env', process.env)
+    const {
+      POSTGRES_USER,
+      POSTGRES_PASSWORD,
+      POSTGRES_DB,
+      POSTGRES_PORT,
+      POSTGRES_HOST,
+    } = process.env
 
-    const host = process.env.POSTGRES_HOST || 'localhost'
     const sequelizeOptions: SequelizeOptions = {
       username: POSTGRES_USER,
-      host: host,
+      host: POSTGRES_HOST,
       database: POSTGRES_DB,
       password: POSTGRES_PASSWORD,
       port: Number(POSTGRES_PORT),

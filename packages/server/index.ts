@@ -6,6 +6,7 @@ import { createClientAndConnect } from './db'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import express from 'express'
+import { useReactionsApi } from './controllers/reactionsController'
 
 dotenv.config()
 
@@ -23,8 +24,12 @@ async function startServer() {
   let vite: ViteDevServer | undefined // инициализируем вит
   const port = Number(process.env.SERVER_PORT) || 3000
 
-  app.use(cors())
+  const router = express.Router()
+  router.use(express.json())
+  useReactionsApi(router)
 
+  app.use(router)
+  app.use(cors())
   if (isDev()) {
     // если в режиме разработки, то создаем сервер вит из коробки
     vite = await createViteServer({
