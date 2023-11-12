@@ -3,21 +3,24 @@ import { CommentReaction, Reaction } from '../models/reactions'
 
 export function useCommentReactions(router: Router) {
   router.get('/topic/:topic_id/comments/:comment_id/reactions', (req, res) =>
-    getTopicReactions(req, res)
+    getCommentReactions(req, res)
   )
   router.put(
     '/topic/:topic_id/comments/:comment_id/reactions/put',
-    (req, res) => putTopicReaction(req, res)
+    (req, res) => putCommentReaction(req, res)
   )
   router.delete(
     '/topic/:topic_id/comments/:comment_id/reactions/delete',
-    (req, res) => deleteUserReactionOnTopic(req, res)
+    (req, res) => deleteUserReactionOnComment(req, res)
   )
 }
 
-const getTopicReactions = async (request: Request, response: Response) => {
+const getCommentReactions = async (request: Request, response: Response) => {
   const { comment_id } = request.params //query?
-
+  if (isNaN(+comment_id)) {
+    response.status(400).send('Invalid comment_d')
+    return
+  }
   CommentReaction.findAll({
     attributes: ['reaction', 'user_id'],
     where: {
@@ -32,10 +35,10 @@ type ReactionModel = {
   reaction: Reaction
   user_id: number
 }
-const putTopicReaction = async (request: Request, response: Response) => {
+const putCommentReaction = async (request: Request, response: Response) => {
   const { comment_id } = request.params
   if (isNaN(+comment_id)) {
-    response.status(404).send('Topic not found')
+    response.status(400).send('Invalid comment_d')
     return
   }
   const model = { ...request.body } as ReactionModel
@@ -58,13 +61,13 @@ const putTopicReaction = async (request: Request, response: Response) => {
   }
 }
 
-const deleteUserReactionOnTopic = async (
+const deleteUserReactionOnComment = async (
   request: Request,
   response: Response
 ) => {
   const { comment_id } = request.params
   if (isNaN(+comment_id)) {
-    response.status(404).send('Topic not found')
+    response.status(400).send('Invalid comment_id')
     return
   }
   const { user_id } = request.body

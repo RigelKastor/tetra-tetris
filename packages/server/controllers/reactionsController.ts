@@ -15,7 +15,10 @@ export function useReactionsApi(router: Router) {
 
 const getTopicReactions = async (request: Request, response: Response) => {
   const { topic_id } = request.params //query?
-
+  if (isNaN(+topic_id)) {
+    response.status(404).send('Invalid topic_id')
+    return
+  }
   TopicReaction.findAll({
     attributes: ['reaction', 'user_id'],
     where: {
@@ -33,7 +36,7 @@ type ReactionModel = {
 const putTopicReaction = async (request: Request, response: Response) => {
   const { topic_id } = request.params
   if (isNaN(+topic_id)) {
-    response.status(404).send('Topic not found')
+    response.status(400).send('Invalid topic_id')
     return
   }
   const model = { ...request.body } as ReactionModel
@@ -62,7 +65,7 @@ const deleteUserReactionOnTopic = async (
 ) => {
   const { topic_id } = request.params
   if (isNaN(+topic_id)) {
-    response.status(404).send('Topic not found')
+    response.status(404).send('Invalid topic_id')
     return
   }
   const { user_id } = request.body
