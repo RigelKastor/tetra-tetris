@@ -7,6 +7,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import express from 'express'
 import { useReactionsApi } from './controllers/reactionsController'
+import { useCommentReactions } from './controllers/commentReactionsController'
 
 dotenv.config()
 
@@ -26,6 +27,7 @@ async function startServer() {
 
   const router = express.Router()
   router.use(express.json())
+  useCommentReactions(router)
   useReactionsApi(router)
 
   app.use(router)

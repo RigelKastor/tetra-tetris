@@ -60,5 +60,5 @@ export class CommentReaction extends Model<CommentReaction> {
   @ForeignKey(() => Comment)
   @AllowNull(false)
   @Column(DataType.INTEGER)
-  commentId: number
+  comment_id: number
 }
