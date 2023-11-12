@@ -15,8 +15,10 @@ const isDev = () => process.env.NODE_ENV === 'development' // определяе
 
 async function startServer() {
   const app = express()
-  const clientPath = path.dirname(require.resolve('client/dist/index.html')) // путь к клиентскому билду
-  const ssrPath = require.resolve('client/ssr-dist/client.cjs') //путь к серверному билду
+  const clientPath = path.dirname(
+    require.resolve('./client/client-dist/index.html')
+  ) // путь к клиентскому билду
+  const ssrPath = require.resolve('./client/ssr-dist/client.cjs') //путь к серверному билду
   let srcPath = ''
   if (isDev()) {
     srcPath = path.dirname(require.resolve('client')) // путь к исходникам
