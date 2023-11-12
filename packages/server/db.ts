@@ -1,4 +1,6 @@
-import { User } from './models/user'
+import UserModal from './forum/models/userModel'
+import TopicModal from './forum/models/topicModel'
+import CommentModal from './forum/models/commentModel'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
@@ -19,8 +21,8 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
 
     const res = await sequelize.query('SELECT NOW()')
     console.log('  ➜ 🎸 Connected to the database at:', res)
-    sequelize.addModels([User])
-    await sequelize.sync()
+    sequelize.addModels([UserModal, TopicModal, CommentModal])
+    await sequelize.sync({ force: true })
     return sequelize
   } catch (e) {
     console.error(e)
@@ -28,3 +30,4 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
 
   return null
 }
+// 'postgres://postgres:postgres@postgres:127.0.0.1:5432/postgres',

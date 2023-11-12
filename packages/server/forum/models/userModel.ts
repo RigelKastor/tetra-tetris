@@ -1,5 +1,6 @@
 import {
   AllowNull,
+  AutoIncrement,
   Column,
   DataType,
   Model,
@@ -13,11 +14,20 @@ import { Theme } from './types'
   paranoid: true,
   tableName: 'users',
 })
-export class User extends Model<User> {
+export default class UserModal extends Model<UserModal> {
   @PrimaryKey
   @AllowNull(false)
+  @AutoIncrement
   @Column(DataType.INTEGER)
-  user_id!: number
+  public override id: number
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  login: string
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  avatar: string
 
   @AllowNull(false)
   @Column(DataType.STRING)
