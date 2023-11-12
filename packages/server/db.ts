@@ -7,7 +7,6 @@ import { CommentReaction } from './models/reactions'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
-    console.log('env', process.env)
     const {
       POSTGRES_USER,
       POSTGRES_PASSWORD,
