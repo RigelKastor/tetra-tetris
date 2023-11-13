@@ -4,5 +4,5 @@ node_modules/
 .vscode
 dist
 ssr-dist
-client-dist
 tmp
+client-dist
