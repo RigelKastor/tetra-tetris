@@ -7,6 +7,8 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import { store } from './service/store'
 import express from 'express'
+import { useReactionsApi } from './controllers/reactionsController'
+import { useCommentReactions } from './controllers/commentReactionsController'
 
 dotenv.config()
 
@@ -22,10 +24,15 @@ async function startServer() {
   const srcPath = path.dirname(require.resolve('client')) // путь к исходникам
   const ssrPath = require.resolve('client/ssr-dist/client.cjs') //путь к серверному билду
   let vite: ViteDevServer | undefined // инициализируем вит
-  const port = Number(process.env.SERVER_PORT) || 3001
+  const port = Number(process.env.SERVER_PORT) || 3000
 
+  const router = express.Router()
+  router.use(express.json())
+  useCommentReactions(router)
+  useReactionsApi(router)
+
+  app.use(router)
   app.use(cors())
-
   if (isDev()) {
     // если в режиме разработки, то создаем сервер вит из коробки
     vite = await createViteServer({

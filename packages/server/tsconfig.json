@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "composite": true,
     "target": "es2019",
     "module": "commonjs",
@@ -13,21 +15,23 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,
+    "strictPropertyInitialization": false,
     "noFallthroughCasesInSwitch": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
+    "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["DOM","es2019", "esnext.asynciterable"],
+    "lib": ["DOM", "es2019", "esnext.asynciterable"],
     "types": ["node", "jest"],
     "baseUrl": ".",
     "paths": {
       "*": ["types/*"]
     },
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "exclude": [
-  "node_modules",
+    "node_modules",
     "dist/**/*",
     "build/**/*" // This is what fixed it!
-]
+  ]
 }
