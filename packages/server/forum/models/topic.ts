@@ -3,15 +3,12 @@ import {
   AutoIncrement,
   Column,
   DataType,
-  ForeignKey,
   HasMany,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript'
-
-import CommentModel from './commentModel'
-import UserModel from './userModel'
+import { Comment } from './comment'
 import { TopicReaction } from './reactions'
 
 @Table({
@@ -19,26 +16,30 @@ import { TopicReaction } from './reactions'
   paranoid: true,
   tableName: 'topics',
 })
-export default class TopicModel extends Model<TopicModel> {
+export class Topic extends Model<Topic> {
   @PrimaryKey
   @AllowNull(false)
   @AutoIncrement
   @Column(DataType.INTEGER)
-  public override id: number
+  override id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)
-  theme: string
-
-  @ForeignKey(() => UserModel)
-  @Column(DataType.UUIDV4)
-  uid: number
+  theme!: string
 
   @AllowNull(false)
   @Column(DataType.STRING)
-  body: string
+  topic_starter!: string
 
-  @HasMany(() => CommentModel, 'topic_id')
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  topic_starter_id!: number
+
+  @AllowNull(false)
+  @Column(DataType.STRING)
+  body!: string
+
+  @HasMany(() => Comment, 'topic_id')
   comments: Comment[] | undefined
 
   @HasMany(() => TopicReaction, 'topic_id')
