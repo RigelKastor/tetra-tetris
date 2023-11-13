@@ -1,13 +1,11 @@
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import PageFrame from '@/components/PageFrame/PageFrame'
 import classes from './styles.module.less'
 import GameStartMenu from './components/GameStartMenu'
 import GameEnd from './components/GameEnd'
 import useGameApi from '@/hooks/useGameApi'
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
-import { saveGameResult } from '@/api/leaderboardApi'
 import { exitFullscreen, requestFullscreen } from '@/utils/requestFullscreen'
-import UserContext from '@/providers/userProvider/UserContext'
 
 const Game: React.FC = () => {
   const [startCountdown, setStartCountdown] = useState<number | string>(3)
@@ -16,7 +14,6 @@ const Game: React.FC = () => {
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval>>()
   const [gameScore, setGameScore] = useState({ score: 0, speed: 0 })
   const [nextShape, setNextShape] = useState<string>()
-  const { user } = useContext(UserContext)
   const gameApi = useGameApi({
     element: document.querySelector('canvas') as HTMLCanvasElement,
     setScore: setGameScore,
@@ -63,9 +60,6 @@ const Game: React.FC = () => {
 
   const content = useMemo(() => {
     if (isGameEnded) {
-      if (user) {
-        saveGameResult(gameScore.score, user.id)
-      }
       return (
         <GameEnd setIsGameRestarted={restartGame} score={gameScore.score} />
       )
@@ -98,7 +92,7 @@ const Game: React.FC = () => {
           <button
             className={classes.game__btnBack}
             onClick={() => {
-              setIsGameEnded(true)
+              restartGame()
               gameApi?.gameOver()
             }}>
             Выйти

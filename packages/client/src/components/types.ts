@@ -10,13 +10,11 @@ export type UserType = {
   avatar: string | null
 }
 
-export type PositionType = 'first' | 'second' | 'third'
-
 export type LeaderUserType = {
-  userId: number
-  avatar?: string | null
-  display_name: string | null
+  avatar?: string
+  display_name: string
   score: number
+  position: 'first' | 'second' | 'third'
 }
 
 export type GameType = {

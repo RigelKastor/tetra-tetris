@@ -25,15 +25,3 @@
     background-color: @blue_grey;
   }
 }
-
-.button-mixin(@type) when (@type = 'yandex') {
-  .button-style-mixin();
-  margin-top: 10px;
-  background-color: @black;
-  font-size: 14px;
-  transition: all 0.2s;
-  &:hover {
-    background-color: @white;
-    color: @black;
-  }
-}

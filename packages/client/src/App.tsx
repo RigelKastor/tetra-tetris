@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ErrorType } from '@/api/getApiError'
 import { UserContextProvider } from '@/providers/userProvider/UserProvider'
 import { urls } from '@/utils/navigation'
@@ -7,45 +7,37 @@ import { UserType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
 import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
-import { signInWithYandex } from './api/oauth'
-import useMessage from 'antd/lib/message/useMessage'
+import { baseApiUrl } from '@/api/api'
+import { useDispatch } from 'react-redux'
+import { setUserData } from '@/services/userSlice'
+
+const resourcesUrl = baseApiUrl + 'resources'
 
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
   const [isFetcing, setIsFetching] = useState(true)
   const navigate = useNavigate()
-  const location = useLocation()
-  const [message] = useMessage()
 
-  const activePage = location.pathname.substring(1).split('/')[0]
+  // const activePage = window.location.pathname.substring(1).split('/')[0]
 
-  useEffect(() => {
-    const yandexAuth = () => {
-      const code = new URLSearchParams(location.search).get('code')
-      if (code) {
-        return signInWithYandex(code)
-      } else return Promise.resolve()
-    }
-    const fetchUserInfo = async () => {
-      await getUserInfo().then(result => {
-        setUserInfo(result)
-        if (activePage === 'login' || activePage === 'registration') {
-          navigate(urls.home)
-        }
-        setIsFetching(false)
-      })
-    }
-    yandexAuth()
-      .then(() => fetchUserInfo())
-      .catch(error => {
-        if (activePage !== 'login' && activePage !== 'registration') {
-          navigate(urls.login)
-        }
-        setGetUserError(error)
-        setIsFetching(false)
-      })
-  }, [])
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     await getUserInfo()
+  //       .then(result => {
+  //         setUserInfo(result)
+  //         if (activePage === 'login' || activePage === 'registration') {
+  //           navigate(urls.home)
+  //         }
+  //         setIsFetching(false)
+  //       })
+  //       .catch(error => {
+  //         setGetUserError(error)
+  //         setIsFetching(false)
+  //       })
+  //   }
+  //   fetchUserInfo()
+  // }, [])
 
   return (
     <React.StrictMode>

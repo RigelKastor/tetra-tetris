@@ -5,10 +5,7 @@ import path from 'path'
 import { createClientAndConnect } from './db'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
-import { store } from './service/store'
 import express from 'express'
-import { useReactionsApi } from './controllers/reactionsController'
-import { useCommentReactions } from './controllers/commentReactionsController'
 
 dotenv.config()
 
@@ -19,20 +16,18 @@ const isDev = () => process.env.NODE_ENV === 'development' // определяе
 async function startServer() {
   const app = express()
   const clientPath = path.dirname(
-    require.resolve('client/client-dist/index.html')
+    require.resolve('./client/client-dist/index.html')
   ) // путь к клиентскому билду
-  const srcPath = path.dirname(require.resolve('client')) // путь к исходникам
-  const ssrPath = require.resolve('client/ssr-dist/client.cjs') //путь к серверному билду
+  const ssrPath = require.resolve('./client/ssr-dist/client.cjs') //путь к серверному билду
+  let srcPath = ''
+  if (isDev()) {
+    srcPath = path.dirname(require.resolve('client')) // путь к исходникам
+  }
   let vite: ViteDevServer | undefined // инициализируем вит
-  const port = Number(process.env.SERVER_PORT) || 3000
+  const port = Number(process.env.SERVER_PORT) || 3001
 
-  const router = express.Router()
-  router.use(express.json())
-  useCommentReactions(router)
-  useReactionsApi(router)
-
-  app.use(router)
   app.use(cors())
+
   if (isDev()) {
     // если в режиме разработки, то создаем сервер вит из коробки
     vite = await createViteServer({
@@ -83,7 +78,7 @@ async function startServer() {
         template = await vite!.transformIndexHtml(url, template)
       }
 
-      let render: (url: string, store: object) => Promise<string>
+      let render: (url: string) => Promise<string>
       if (!isDev()) {
         render = (await import(ssrPath)).render
       } else {
@@ -95,7 +90,7 @@ async function startServer() {
       }
 
       // вызываем метод рендер и прокидываем путь. Из client/ssr.tsx
-      const appHtml = await render(url, store)
+      const appHtml = await render(url)
 
       // Inject the app-rendered HTML into the template.
       const html = template.replace('<!--ssr-outlet-->', appHtml)
