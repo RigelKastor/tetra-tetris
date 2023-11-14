@@ -1,7 +1,7 @@
 import UserModal from './forum/models/userModel'
 import TopicModal from './forum/models/topicModel'
 import CommentModal from './forum/models/commentModel'
-import { Comment } from './models/comment'
+// import { Comment } from './forum/models/comment'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 import { TopicReaction } from './forum/models/reactions'
 import { CommentReaction } from './forum/models/reactions'

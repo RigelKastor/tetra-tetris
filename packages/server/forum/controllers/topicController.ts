@@ -3,7 +3,7 @@ import TopicModel from '../models/topicModel'
 import { Sequelize } from 'sequelize-typescript'
 import CommentModel from '../models/commentModel'
 
-const getTopics = (req: Request, res: Response) => {
+const getTopics = (res: Response) => {
   TopicModel.findAll({
     order: [[Sequelize.col('createdAt'), 'DESC']],
   })
@@ -65,7 +65,7 @@ const deleteTopic = (req: Request, res: Response) => {
   const { id } = req.params
 
   TopicModel.findOne({ where: { id } })
-    .then(topic => {
+    .then(() => {
       TopicModel.destroy({
         where: { id },
       })
@@ -86,7 +86,7 @@ const deleteTopic = (req: Request, res: Response) => {
 const updateTopic = (req: Request, res: Response) => {
   const { id } = req.params
 
-  TopicModel.findOne({ where: { id } }).then(topic => {
+  TopicModel.findOne({ where: { id } }).then(() => {
     TopicModel.update(
       {
         ...req.body,

@@ -47,7 +47,7 @@ const postComment = (req: Request, res: Response) => {
 const deleteComment = (req: Request, res: Response) => {
   const { id } = req.params
 
-  CommentModel.findOne({ where: { id } }).then(comment => {
+  CommentModel.findOne({ where: { id } }).then(() => {
     CommentModel.destroy({
       where: { id },
     })
@@ -65,7 +65,7 @@ const deleteComment = (req: Request, res: Response) => {
 const updateComment = (req: Request, res: Response) => {
   const { id } = req.params
 
-  CommentModel.findOne({ where: { id } }).then(comment => {
+  CommentModel.findOne({ where: { id } }).then(() => {
     CommentModel.update(
       {
         ...req.body,
