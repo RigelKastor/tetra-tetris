@@ -2,6 +2,7 @@ import { useContext, useMemo, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 import Avatar from '@components/Avatar/Avatar'
+import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
 import { urls } from '@/utils/navigation'
 import classes from './styles.module.less'
 import UserContext from '@/providers/userProvider/UserContext'
@@ -74,6 +75,7 @@ const Header = () => {
           </NavLink>
         ))}
       </div>
+      <SwitchTheme />
       <div
         className={classes.header__menu__avatar}
         onClick={switchShowUserMenu}>
