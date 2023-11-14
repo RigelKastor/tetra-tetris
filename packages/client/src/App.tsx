@@ -10,6 +10,8 @@ import { UserType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
 import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
+import { signInWithYandex } from './api/oauth'
+import useMessage from 'antd/lib/message/useMessage'
 
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
@@ -18,29 +20,35 @@ function App() {
   const [isFetcing, setIsFetching] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
+  const [message] = useMessage()
 
   const activePage = location.pathname.substring(1).split('/')[0]
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      await getUserInfo()
-        .then(result => {
-          setUserInfo(result)
-
-          if (activePage === 'login' || activePage === 'registration') {
-            navigate(urls.home)
-          }
-          setIsFetching(false)
-        })
-        .catch(error => {
-          if (activePage !== 'login' && activePage !== 'registration') {
-            navigate(urls.login)
-          }
-          setGetUserError(error)
-          setIsFetching(false)
-        })
+    const yandexAuth = () => {
+      const code = new URLSearchParams(location.search).get('code')
+      if (code) {
+        return signInWithYandex(code)
+      } else return Promise.resolve()
     }
-    fetchUserInfo()
+    const fetchUserInfo = async () => {
+      await getUserInfo().then(result => {
+        setUserInfo(result)
+        if (activePage === 'login' || activePage === 'registration') {
+          navigate(urls.home)
+        }
+        setIsFetching(false)
+      })
+    }
+    yandexAuth()
+      .then(() => fetchUserInfo())
+      .catch(error => {
+        if (activePage !== 'login' && activePage !== 'registration') {
+          navigate(urls.login)
+        }
+        setGetUserError(error)
+        setIsFetching(false)
+      })
   }, [])
 
   return (

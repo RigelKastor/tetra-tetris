@@ -6,6 +6,7 @@ import { postLoginUser, SignInType } from '@/api/auth'
 import { urls } from '@/utils/navigation'
 import classes from '../signUp/styles.module.less'
 import TetrisImg from '../../components/TetrisImg/Tetris'
+import { getServiceId, getYandexUrl } from '@/api/oauth'
 import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
 
 const Login: React.FC = () => {
@@ -22,6 +23,15 @@ const Login: React.FC = () => {
         .catch(({ error }) => {
           setAuthError(error.description)
         })
+    }
+  }, [])
+
+  const oAuth = useCallback(async () => {
+    try {
+      const clientId = await getServiceId()
+      window.location.replace(getYandexUrl(clientId))
+    } catch (error) {
+      console.log(error)
     }
   }, [])
 
@@ -58,15 +68,23 @@ const Login: React.FC = () => {
               }}>
               Login
             </button>
-            <Button
-              href={urls.signup}
-              type="link"
-              style={{
-                width: '100%',
-              }}>
-              Don’t have an account?
-            </Button>
           </Form>
+          <button
+            onClick={oAuth}
+            className={classes.yandex_button}
+            style={{
+              width: '100%',
+            }}>
+            Login via Yandex
+          </button>
+          <Button
+            href={urls.signup}
+            type="link"
+            style={{
+              width: '100%',
+            }}>
+            Don’t have an account?
+          </Button>
         </div>
       </div>
     </>

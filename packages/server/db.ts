@@ -1,28 +1,47 @@
-import { Client } from 'pg'
+import UserModal from './forum/models/userModel'
+import TopicModal from './forum/models/topicModel'
+import CommentModal from './forum/models/commentModel'
+// import { Comment } from './forum/models/comment'
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
+import { TopicReaction } from './forum/models/reactions'
+import { CommentReaction } from './forum/models/reactions'
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env
-
-export const createClientAndConnect = async (): Promise<Client | null> => {
+export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
-    const client = new Client({
-      user: POSTGRES_USER,
-      host: 'localhost',
+    const {
+      POSTGRES_USER,
+      POSTGRES_PASSWORD,
+      POSTGRES_DB,
+      POSTGRES_PORT,
+      POSTGRES_HOST,
+    } = process.env
+
+    const sequelizeOptions: SequelizeOptions = {
+      username: POSTGRES_USER,
+      host: POSTGRES_HOST,
       database: POSTGRES_DB,
       password: POSTGRES_PASSWORD,
       port: Number(POSTGRES_PORT),
-    })
+      dialect: 'postgres',
+    }
+    const sequelize = new Sequelize(sequelizeOptions)
 
-    await client.connect()
+    const res = await sequelize.query('SELECT NOW()')
+    console.log('  ➜ 🎸 Connected to the database at:', res)
 
-    const res = await client.query('SELECT NOW()')
-    console.log('  ➜ 🎸 Connected to the database at:', res?.rows?.[0].now)
-    client.end()
-
-    return client
+    sequelize.addModels([
+      UserModal,
+      TopicModal,
+      CommentModal,
+      TopicReaction,
+      CommentReaction,
+    ])
+    await sequelize.sync({ force: true })
+    return sequelize
   } catch (e) {
     console.error(e)
   }
 
   return null
 }
+// 'postgres://postgres:postgres@postgres:127.0.0.1:5432/postgres',

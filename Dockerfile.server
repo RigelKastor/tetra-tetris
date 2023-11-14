@@ -14,6 +14,8 @@ COPY . .
 
 RUN yarn lerna bootstrap
 RUN rm -rf /app/packages/server/dist/ && yarn build --scope=server
+RUN rm -rf /app/packages/client/client-dist/ && yarn build --scope=client
+RUN rm -rf /app/packages/client/ssr-dist/ && cd packages/client && yarn build:ssr
 
 
 FROM node:$NODE_VERSION-buster-slim as production
@@ -21,6 +23,9 @@ WORKDIR /app
 
 COPY --from=builder /app/packages/server/dist/ /app/
 COPY --from=builder /app/packages/server/package.json /app/package.json
+COPY --from=builder /app/packages/client/client-dist/ /app/client/client-dist/
+COPY --from=builder /app/packages/client/ssr-dist/ /app/client/ssr-dist/
+COPY --from=builder /app/.env /app/
 RUN yarn install --production=true
 
 EXPOSE $SERVER_PORT
