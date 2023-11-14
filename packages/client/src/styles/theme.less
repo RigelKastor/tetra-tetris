@@ -23,3 +23,60 @@
 @font-size-base: 12px;
 @border-radius-sm: 8px;
 @border-radius-md: 16px;
+
+:root {
+  --border-color: #1D1E53;
+
+  --primary-button-bg: @pink;
+}
+
+:root > body[theme-mode = 'default'] {
+  --background-primary: @black;
+  --background-leaderboard: @blue_grey;
+  --background-presentation: @blue;
+  --background-forum: @grey;
+  --background-profile: @coffee;
+  --background-default: @blue_text;
+
+  --background-form: @white;
+  --background-form-hover: @grey;
+
+  --background-header: @blue_grey;
+
+  --logotype-color: @white;
+
+  --text-primary: @black;
+  --text-link: @blue;
+  --menu-link--default: @coffee;
+  --menu-link--active: @yellow;
+  --text-leader: @white;
+
+  --background--signup--switch-theme: @pink;
+}
+
+:root > body[theme-mode = 'light'] {
+  --background-primary: @grey;
+  --background-leaderboard: @light-yellow;
+
+  --background-presentation: @white;
+  --background-forum: @grey;
+  --background-profile: @coffee;
+  --background-default: #C9CAFF;
+
+  --background-form: @white;
+  --background-form-hover: @grey;
+
+  --background-header: @white;
+
+  --logotype-color: @blue_text;
+
+  --text-primary: @black;
+  --text-link: @blue;
+
+  --text-leader: @blue_text;
+
+  --menu-link--default: @blue_grey;
+  --menu-link--active: @blue_text;
+
+  --background--signup--switch-theme: @yellow;
+}

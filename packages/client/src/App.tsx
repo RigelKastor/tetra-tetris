@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ErrorType } from '@/api/getApiError'
-import { UserContextProvider } from '@/providers/userProvider/UserProvider'
+import {
+  UserContextProvider,
+  UserTheme,
+} from '@/providers/userProvider/UserProvider'
 import { urls } from '@/utils/navigation'
 import { UserType } from '@components/types'
 import Preloader from '@components/Preloader/Preloader'
@@ -13,6 +16,7 @@ import useMessage from 'antd/lib/message/useMessage'
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
+  const [theme, setTheme] = useState<UserTheme>({} as UserTheme)
   const [isFetcing, setIsFetching] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
@@ -49,7 +53,11 @@ function App() {
 
   return (
     <React.StrictMode>
-      <UserContextProvider user={userInfo} setUser={setUserInfo}>
+      <UserContextProvider
+        user={userInfo}
+        settingsTheme={theme}
+        setUser={setUserInfo}
+        setTheme={setTheme}>
         {isFetcing ? (
           <Preloader />
         ) : (

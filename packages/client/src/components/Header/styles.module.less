@@ -4,15 +4,15 @@
   width: 100%;
   padding: 0 18px;
   height: 75px;
-  border-bottom: 1px solid @coffee;
+  border-bottom: 1px solid var(--menu-link--default);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: @blue_grey;
+  background: var(--background-header);
   border-radius: 16px 16px 0 0;
 
   &__logotype {
-    color: @white;
+    color: var(--logotype-color);
     font-family: @font-family-bold;
     font-size: 36px;
     font-weight: 700;
@@ -53,11 +53,11 @@
       text-decoration: none;
 
       &--active {
-        color: @yellow;
+        color: var(--menu-link--active);
       }
 
       &--default {
-        color: @coffee;
+        color: var(--menu-link--default);
       }
     }
 
