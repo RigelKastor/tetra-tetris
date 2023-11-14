@@ -63,7 +63,6 @@ https://www.youtube.com/watch?v=alHKbgJnnXw&ab_channel=Upskilling
 5. Перейти в pages/server 
 6. Установить пакеты включая клиент. (yarn link client)
 7. Запустить дев режим (yarn dev)
-8. Запустить дев сервер - yarn build:ssr, Запустить прод - yarn build:prod
 
 ## Technical
 
