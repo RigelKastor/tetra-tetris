@@ -33,7 +33,7 @@ export default class CommentModel extends Model<CommentModel> {
   body: string
 
   @ForeignKey(() => TopicModel)
-  @Column(DataType.UUIDV4)
+  @Column(DataType.INTEGER)
   topic_id: number
 
   @ForeignKey(() => CommentModel)

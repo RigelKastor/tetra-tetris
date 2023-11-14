@@ -31,7 +31,7 @@ export default class TopicModel extends Model<TopicModel> {
   theme: string
 
   @ForeignKey(() => UserModel)
-  @Column(DataType.UUIDV4)
+  @Column(DataType.INTEGER)
   uid: number
 
   @AllowNull(false)
