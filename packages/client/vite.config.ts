@@ -6,13 +6,6 @@ dotenv.config()
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    rollupOptions: {
-      output: {
-        dir: 'client-dist',
-      },
-    },
-  },
   server: {
     port: Number(process.env.CLIENT_PORT) || 3001,
   },

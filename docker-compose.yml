@@ -10,10 +10,10 @@ services:
       args:
         CLIENT_PORT: ${CLIENT_PORT}
     depends_on:
-      - server
+      - postgres
     restart: always
     ports:
-      - "${CLIENT_PORT}:80"
+      - '${CLIENT_PORT}:80'
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
       - SERVER_PORT=${SERVER_PORT}
@@ -34,6 +34,7 @@ services:
       - '${SERVER_PORT}:${SERVER_PORT}'
     environment:
       SERVER_PORT: ${SERVER_PORT}
+    env_file: ./.env
     networks:
       - awesome
 

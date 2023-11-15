@@ -4,6 +4,7 @@ import App from './App'
 import { store } from './services/store'
 import { Provider } from 'react-redux'
 import '@styles/styles.less'
+import GETTopicsEXAMPLE from './GETTopicsEXAMPLE'
 
 if ('serviceWorker' in navigator && !(import.meta as any).env.DEV) {
   window.addEventListener('load', () => {
@@ -27,6 +28,8 @@ ReactDOM.hydrateRoot(
   <Provider store={store}>
     <BrowserRouter>
       <App />
+      {/* Удалить, пример работы с беком */}
+      <GETTopicsEXAMPLE />
     </BrowserRouter>
   </Provider>
 )

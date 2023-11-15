@@ -1,6 +1,7 @@
 import {
   AllowNull,
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -12,7 +13,7 @@ import {
 
 import CommentModel from './commentModel'
 import UserModel from './userModel'
-import { TopicReaction } from './reactions'
+import TopicReactionModel from './reactions'
 
 @Table({
   timestamps: false,
@@ -34,6 +35,11 @@ export default class TopicModel extends Model<TopicModel> {
   @Column(DataType.INTEGER)
   uid: number
 
+  @BelongsTo(() => UserModel, {
+    onDelete: 'CASCADE',
+  })
+  parent: UserModel
+
   @AllowNull(false)
   @Column(DataType.STRING)
   body: string
@@ -41,6 +47,6 @@ export default class TopicModel extends Model<TopicModel> {
   @HasMany(() => CommentModel, 'topic_id')
   comments: Comment[] | undefined
 
-  @HasMany(() => TopicReaction, 'topic_id')
-  reactions: TopicReaction[] | undefined
+  @HasMany(() => TopicReactionModel, 'topic_id')
+  reactions: TopicReactionModel[] | undefined
 }

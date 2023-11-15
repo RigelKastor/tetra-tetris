@@ -1,19 +1,23 @@
-import UserModal from './forum/models/userModel'
-import TopicModal from './forum/models/topicModel'
-import CommentModal from './forum/models/commentModel'
-// import { Comment } from './forum/models/comment'
+import UserModel from './forum/models/userModel'
+import TopicModel from './forum/models/topicModel'
+import CommentModel from './forum/models/commentModel'
 import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
-import { TopicReaction } from './forum/models/reactions'
-import { CommentReaction } from './forum/models/reactions'
+import TopicReactionModel from './forum/models/reactions'
+import CommentReactionModel from './forum/models/reactions'
 
 export const createClientAndConnect = async (): Promise<Sequelize | null> => {
   try {
-    const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-      process.env
+    const {
+      POSTGRES_USER,
+      POSTGRES_PASSWORD,
+      POSTGRES_DB,
+      POSTGRES_PORT,
+      POSTGRES_HOST,
+    } = process.env
 
     const sequelizeOptions: SequelizeOptions = {
       username: POSTGRES_USER,
-      host: 'localhost',
+      host: POSTGRES_HOST, // Вот тут понять как менять на 'localhost' если запускаем через yarn dev,
       database: POSTGRES_DB,
       password: POSTGRES_PASSWORD,
       port: Number(POSTGRES_PORT),
@@ -25,13 +29,33 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
     console.log('  ➜ 🎸 Connected to the database at:', res)
 
     sequelize.addModels([
-      UserModal,
-      TopicModal,
-      CommentModal,
-      TopicReaction,
-      CommentReaction,
+      UserModel,
+      TopicModel,
+      CommentModel,
+      TopicReactionModel,
+      CommentReactionModel,
     ])
-    await sequelize.sync({ force: true })
+    await sequelize.sync()
+
+    // ############### код нижу будет удалён
+
+    //удаляю ранее созданных юзеров и обнуляю id для тестовых топиков
+    await UserModel.destroy({ where: {} })
+    await UserModel.sequelize!.query(
+      'ALTER SEQUENCE users_id_seq RESTART WITH 1'
+    )
+
+    // добавляю тестовых юзеров
+    sequelize.query(
+      "INSERT INTO users (login, name, avatar, theme) VALUES ('kochanov@yandex.ru', 'Andrey', 'avaLink', 'light'), ('semen@yandex.ru', 'Semen', 'avaLink', 'dark')"
+    )
+
+    // добавляю тестовые топики
+
+    sequelize.query(
+      "INSERT INTO topics (theme, body, uid) VALUES ('Как набрать 1000 очков', 'Есть ли какой-то лайфхак?', 1), ('Игровой гайд', 'LOREM IPSUM BLA BLA BLA', 2);"
+    )
+    // ###########################################
     return sequelize
   } catch (e) {
     console.error(e)

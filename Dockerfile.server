@@ -1,32 +1,29 @@
-ARG NODE_VERSION=16
+ARG NODE_VERSION=18.17.1
 ARG SERVER_PORT=3001
 
-FROM node:$NODE_VERSION-buster as base
+FROM node:$NODE_VERSION-buster as builder
 
 WORKDIR /app
 
-FROM base as builder
-
-COPY package.json yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 RUN yarn install
 
 COPY . .
 
 RUN yarn lerna bootstrap
 RUN rm -rf /app/packages/server/dist/ && yarn build --scope=server
-RUN rm -rf /app/packages/client/client-dist/ && yarn build --scope=client
+RUN rm -rf /app/packages/client/dist/ && yarn build --scope=client
 RUN rm -rf /app/packages/client/ssr-dist/ && cd packages/client && yarn build:ssr
 
-
-FROM node:$NODE_VERSION-buster-slim as production
+FROM node:$NODE_VERSION-buster-slim as base
 WORKDIR /app
 
-COPY --from=builder /app/packages/server/dist/ /app/
-COPY --from=builder /app/packages/server/package.json /app/package.json
-COPY --from=builder /app/packages/client/client-dist/ /app/client/client-dist/
-COPY --from=builder /app/packages/client/ssr-dist/ /app/client/ssr-dist/
-COPY --from=builder /app/.env /app/
-RUN yarn install --production=true
+COPY --from=builder /app/packages/server/ /app/server/
+COPY --from=builder /app/packages/client/ /app/server/client/
+COPY --from=builder /app/.env /app/server
+RUN cd ./server/ && yarn install
+RUN cd ./server/client/ && yarn install
 
 EXPOSE $SERVER_PORT
-CMD [ "node", "/app/index.js" ]
+CMD [ "node", "/app/server/dist/index.js" ]

@@ -20,14 +20,10 @@ const isDev = () => process.env.NODE_ENV === 'development' // определяе
 
 async function startServer() {
   const app = express()
-  const clientPath = path.dirname(
-    require.resolve('client/client-dist/index.html')
-  ) // путь к клиентскому билду
-  const ssrPath = require.resolve('client/ssr-dist/client.cjs') //путь к серверному билду
-  let srcPath = ''
-  if (isDev()) {
-    srcPath = path.dirname(require.resolve('client')) // путь к исходникам
-  }
+  const clientPath = path.resolve(__dirname, '../client/dist') // путь к клиентскому билду
+  const ssrPath = path.resolve(__dirname, '../client/ssr-dist/client.cjs') //путь к серверному билду
+  const srcPath = path.resolve(__dirname, '../client') // путь к исходникам
+
   let vite: ViteDevServer | undefined // инициализируем вит
   const port = Number(process.env.SERVER_PORT) || 3000
 

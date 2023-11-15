@@ -4,9 +4,7 @@ import { Sequelize } from 'sequelize-typescript'
 import CommentModel from '../models/commentModel'
 
 const getTopics = (res: Response) => {
-  TopicModel.findAll({
-    order: [[Sequelize.col('createdAt'), 'DESC']],
-  })
+  TopicModel.findAll()
     .then(topics => {
       res.status(200).json(topics)
     })
