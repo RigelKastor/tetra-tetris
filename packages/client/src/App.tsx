@@ -12,6 +12,7 @@ import AppRouters from './routers'
 import { getUserInfo } from './api/auth'
 import { signInWithYandex } from './api/oauth'
 import useMessage from 'antd/lib/message/useMessage'
+import { baseFetch } from './api/api'
 
 function App() {
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
@@ -23,8 +24,15 @@ function App() {
   const [message] = useMessage()
 
   const activePage = location.pathname.substring(1).split('/')[0]
-
+  const baseUrl = `http://localhost:3001`
   useEffect(() => {
+    const getTopics = async () => {
+      const response = await baseFetch.get(`${baseUrl}/comment`)
+      console.log(`response `, response)
+      console.log(1)
+    }
+
+    getTopics()
     const yandexAuth = () => {
       const code = new URLSearchParams(location.search).get('code')
       if (code) {

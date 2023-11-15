@@ -1,17 +1,5 @@
 import type { Request, Response, Router } from 'express'
-import { Reaction, TopicReaction } from '../forum/models/reactions'
-
-export function useReactionsApi(router: Router) {
-  router.get('/topic/:topic_id/reactions', (req, res) =>
-    getTopicReactions(req, res)
-  )
-  router.put('/topic/:topic_id/reactions/put', (req, res) =>
-    putTopicReaction(req, res)
-  )
-  router.delete('/topic/:topic_id/reactions/delete', (req, res) =>
-    deleteUserReactionOnTopic(req, res)
-  )
-}
+import { Reaction, TopicReaction } from '../models/reactions'
 
 const getTopicReactions = async (request: Request, response: Response) => {
   const { topic_id } = request.params //query?
@@ -82,4 +70,16 @@ const deleteUserReactionOnTopic = async (
       }
     })
     .catch(() => response.status(400).send('Bad Request'))
+}
+
+export function reactionsRouter(router: Router) {
+  router.get('/topic/:topic_id/reactions', (req, res) =>
+    getTopicReactions(req, res)
+  )
+  router.put('/topic/:topic_id/reactions/put', (req, res) =>
+    putTopicReaction(req, res)
+  )
+  router.delete('/topic/:topic_id/reactions/delete', (req, res) =>
+    deleteUserReactionOnTopic(req, res)
+  )
 }

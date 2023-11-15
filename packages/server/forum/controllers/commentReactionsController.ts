@@ -1,19 +1,5 @@
 import type { Request, Response, Router } from 'express'
-import { CommentReaction, Reaction } from '../forum/models/reactions'
-
-export function useCommentReactions(router: Router) {
-  router.get('/topic/:topic_id/comments/:comment_id/reactions', (req, res) =>
-    getCommentReactions(req, res)
-  )
-  router.put(
-    '/topic/:topic_id/comments/:comment_id/reactions/put',
-    (req, res) => putCommentReaction(req, res)
-  )
-  router.delete(
-    '/topic/:topic_id/comments/:comment_id/reactions/delete',
-    (req, res) => deleteUserReactionOnComment(req, res)
-  )
-}
+import { CommentReaction, Reaction } from '../models/reactions'
 
 const getCommentReactions = async (request: Request, response: Response) => {
   const { comment_id } = request.params //query?
@@ -84,4 +70,18 @@ const deleteUserReactionOnComment = async (
       }
     })
     .catch(() => response.status(400).send('Bad Request'))
+}
+
+export function commentReactionsRouter(router: Router) {
+  router.get('/topic/:topic_id/comments/:comment_id/reactions', (req, res) =>
+    getCommentReactions(req, res)
+  )
+  router.put(
+    '/topic/:topic_id/comments/:comment_id/reactions/put',
+    (req, res) => putCommentReaction(req, res)
+  )
+  router.delete(
+    '/topic/:topic_id/comments/:comment_id/reactions/delete',
+    (req, res) => deleteUserReactionOnComment(req, res)
+  )
 }

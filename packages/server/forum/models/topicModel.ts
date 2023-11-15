@@ -15,7 +15,7 @@ import UserModel from './userModel'
 import { TopicReaction } from './reactions'
 
 @Table({
-  timestamps: true,
+  timestamps: false,
   paranoid: true,
   tableName: 'topics',
 })
