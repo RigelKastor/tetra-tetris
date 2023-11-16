@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import Header from '@components/Header/Header'
 import classes from './styles.module.less'
 import { PageTypes } from '@components/types'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 const cx = classNames.bind(classes)
 
@@ -12,6 +13,9 @@ interface PageFrameProps {
 }
 
 const PageFrame = ({ pageType, children }: PageFrameProps) => {
+  const state = useTypedSelector(state => state)
+  console.log(`USER IN UI`, state)
+
   return (
     <div
       className={cx(

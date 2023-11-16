@@ -5,7 +5,6 @@ import path from 'path'
 import { createClientAndConnect } from './db'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
-import { store } from './service/store'
 import express from 'express'
 import { commentReactionsRouter } from './forum/controllers/commentReactionsController'
 import { reactionsRouter } from './forum/controllers/reactionsController'
@@ -88,7 +87,7 @@ async function startServer() {
         template = await vite!.transformIndexHtml(url, template)
       }
 
-      let render: (url: string, store: object) => Promise<string>
+      let render: (url: string) => Promise<string>
       if (!isDev()) {
         render = (await import(ssrPath)).render
       } else {
@@ -100,10 +99,14 @@ async function startServer() {
       }
 
       // вызываем метод рендер и прокидываем путь. Из client/ssr.tsx
-      const appHtml = await render(url, store)
+      const [initialState, reactHtml] = await render(url)
 
       // Inject the app-rendered HTML into the template.
-      const html = template.replace('<!--ssr-outlet-->', appHtml)
+      const initStateSerialized = JSON.stringify(initialState)
+      console.log(`initStateSerialized `, initStateSerialized)
+      const html = template
+        .replace('<!--ssr-outlet-->', reactHtml)
+        .replace('<!--store-data-->', initStateSerialized)
 
       // Send the rendered HTML back.
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
