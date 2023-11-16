@@ -38,7 +38,7 @@ export default class CommentModel extends Model<CommentModel> {
 
   @ForeignKey(() => CommentModel)
   @AllowNull(true)
-  @Column(DataType.UUIDV4)
+  @Column(DataType.INTEGER)
   parent_id: number | undefined
 
   @HasMany(() => CommentModel, 'parent_id')

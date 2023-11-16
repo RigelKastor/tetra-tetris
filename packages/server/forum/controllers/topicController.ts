@@ -1,12 +1,10 @@
-import type { Request, Response } from 'express'
+import type { Request, Response, Router } from 'express'
 import TopicModel from '../models/topicModel'
 import { Sequelize } from 'sequelize-typescript'
 import CommentModel from '../models/commentModel'
 
 const getTopics = (res: Response) => {
-  TopicModel.findAll({
-    order: [[Sequelize.col('createdAt'), 'DESC']],
-  })
+  TopicModel.findAll()
     .then(topics => {
       res.status(200).json(topics)
     })
@@ -112,4 +110,10 @@ const updateTopic = (req: Request, res: Response) => {
   })
 }
 
-export { getTopics, getTopic, postTopic, deleteTopic, updateTopic }
+export function topicRouter(router: Router) {
+  router.get('/topics/:topic_id', (req, res) => getTopic(req, res))
+  router.get('/topics', (_req, res) => getTopics(res))
+  router.put('/topics/:topic_id', (req, res) => updateTopic(req, res))
+  router.post('/topics', (req, res) => postTopic(req, res))
+  router.delete('/topic/:topic_id', (req, res) => deleteTopic(req, res))
+}

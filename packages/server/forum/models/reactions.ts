@@ -17,7 +17,7 @@ export type Reaction = 'like' | 'dislike'
   paranoid: false,
   tableName: 'topic_reactions',
 })
-export class TopicReaction extends Model<TopicReaction> {
+export class TopicReactionModel extends Model<TopicReactionModel> {
   @PrimaryKey
   @AllowNull(false)
   @AutoIncrement
@@ -42,7 +42,7 @@ export class TopicReaction extends Model<TopicReaction> {
   paranoid: false,
   tableName: 'comment_reactions',
 })
-export class CommentReaction extends Model<CommentReaction> {
+export default class CommentReactionModel extends Model<CommentReactionModel> {
   @PrimaryKey
   @AllowNull(false)
   @AutoIncrement

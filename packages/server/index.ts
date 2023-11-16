@@ -7,8 +7,10 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import { store } from './service/store'
 import express from 'express'
-import { useReactionsApi } from './controllers/reactionsController'
-import { useCommentReactions } from './controllers/commentReactionsController'
+import { commentReactionsRouter } from './forum/controllers/commentReactionsController'
+import { reactionsRouter } from './forum/controllers/reactionsController'
+import { topicRouter } from './forum/controllers/topicController'
+import { commentRouter } from './forum/controllers/commentController'
 
 dotenv.config()
 
@@ -18,21 +20,21 @@ const isDev = () => process.env.NODE_ENV === 'development' // определяе
 
 async function startServer() {
   const app = express()
-  const clientPath = path.dirname(
-    require.resolve('./client/client-dist/index.html')
-  ) // путь к клиентскому билду
-  const ssrPath = require.resolve('./client/ssr-dist/client.cjs') //путь к серверному билду
-  let srcPath = ''
-  if (isDev()) {
-    srcPath = path.dirname(require.resolve('client')) // путь к исходникам
-  }
+  const clientPath = path.resolve(__dirname, '../client/dist') // путь к клиентскому билду
+  const ssrPath = path.resolve(__dirname, '../client/ssr-dist/client.cjs') //путь к серверному билду
+  const srcPath = path.resolve(__dirname, '../client') // путь к исходникам
+
   let vite: ViteDevServer | undefined // инициализируем вит
   const port = Number(process.env.SERVER_PORT) || 3000
 
   const router = express.Router()
+
   router.use(express.json())
-  useCommentReactions(router)
-  useReactionsApi(router)
+
+  commentReactionsRouter(router)
+  reactionsRouter(router)
+  topicRouter(router)
+  commentRouter(router)
 
   app.use(router)
   app.use(cors())

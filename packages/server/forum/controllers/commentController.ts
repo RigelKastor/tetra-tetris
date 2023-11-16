@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { Request, Response, Router } from 'express'
 import CommentModel from '../models/commentModel'
 import { Sequelize } from 'sequelize-typescript'
 
@@ -93,4 +93,10 @@ const updateComment = (req: Request, res: Response) => {
   })
 }
 
-export { getComments, postComment, updateComment, deleteComment }
+export function commentRouter(router: Router) {
+  router.get('/comments/:topic_id', (req, res) => getComments(req, res))
+  router.get('/comments', (req, res) => getComments(req, res))
+  router.post('/comments', (req, res) => postComment(req, res))
+  router.delete('/comments/:comment_id', (req, res) => deleteComment(req, res))
+  router.put('/comments/:comment_id', (req, res) => updateComment(req, res))
+}

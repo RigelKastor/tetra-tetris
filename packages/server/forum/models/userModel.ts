@@ -27,9 +27,12 @@ export default class UserModal extends Model<UserModal> {
 
   @AllowNull(false)
   @Column(DataType.STRING)
-  avatar: string
+  name: string
 
   @AllowNull(false)
+  @Column(DataType.STRING)
+  avatar: string
+
   @Column(DataType.STRING)
   theme: Theme | undefined
 }

@@ -14,6 +14,8 @@ import { signInWithYandex } from './api/oauth'
 import useMessage from 'antd/lib/message/useMessage'
 
 function App() {
+  console.log(123)
+
   const [getUserError, setGetUserError] = useState<ErrorType | null>()
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
   const [theme, setTheme] = useState<UserTheme>({} as UserTheme)

@@ -9,8 +9,8 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript'
-import { Topic } from './topic'
-import { CommentReaction } from './reactions'
+import TopicModel from './topicModel'
+import CommentReactionModel from './reactions'
 
 @Table({
   timestamps: true,
@@ -36,7 +36,7 @@ export class Comment extends Model<Comment> {
   @Column(DataType.STRING)
   body!: string
 
-  @ForeignKey(() => Topic)
+  @ForeignKey(() => TopicModel)
   @Column({ type: DataType.INTEGER, field: 'topic_id' })
   topic_id: number
 
@@ -48,6 +48,6 @@ export class Comment extends Model<Comment> {
   @HasMany(() => Comment, 'parent_id')
   comments: Comment[] | undefined
 
-  @HasMany(() => CommentReaction, 'comment_id')
-  reactions: CommentReaction[] | undefined
+  @HasMany(() => CommentReactionModel, 'comment_id')
+  reactions: CommentReactionModel[] | undefined
 }

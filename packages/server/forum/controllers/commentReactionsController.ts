@@ -1,19 +1,5 @@
 import type { Request, Response, Router } from 'express'
-import { CommentReaction, Reaction } from '../forum/models/reactions'
-
-export function useCommentReactions(router: Router) {
-  router.get('/topic/:topic_id/comments/:comment_id/reactions', (req, res) =>
-    getCommentReactions(req, res)
-  )
-  router.put(
-    '/topic/:topic_id/comments/:comment_id/reactions/put',
-    (req, res) => putCommentReaction(req, res)
-  )
-  router.delete(
-    '/topic/:topic_id/comments/:comment_id/reactions/delete',
-    (req, res) => deleteUserReactionOnComment(req, res)
-  )
-}
+import CommentReactionModel, { Reaction } from '../models/reactions'
 
 const getCommentReactions = async (request: Request, response: Response) => {
   const { comment_id } = request.params //query?
@@ -21,7 +7,7 @@ const getCommentReactions = async (request: Request, response: Response) => {
     response.status(400).send('Invalid comment_d')
     return
   }
-  CommentReaction.findAll({
+  CommentReactionModel.findAll({
     attributes: ['reaction', 'user_id'],
     where: {
       comment_id: comment_id,
@@ -43,7 +29,7 @@ const putCommentReaction = async (request: Request, response: Response) => {
   }
   const model = { ...request.body } as ReactionModel
 
-  const existing = await CommentReaction.findOne({
+  const existing = await CommentReactionModel.findOne({
     where: {
       user_id: model.user_id,
       comment_id: comment_id,
@@ -52,10 +38,10 @@ const putCommentReaction = async (request: Request, response: Response) => {
   if (existing) {
     response.status(409).send('This user already has a rection on this topic')
   } else {
-    CommentReaction.create({
+    CommentReactionModel.create({
       comment_id: +comment_id,
       ...model,
-    } as CommentReaction)
+    } as CommentReactionModel)
       .then(() => response.status(201).send())
       .catch(() => response.status(400).send('Bad request'))
   }
@@ -72,7 +58,7 @@ const deleteUserReactionOnComment = async (
   }
   const { user_id } = request.body
 
-  CommentReaction.destroy({
+  CommentReactionModel.destroy({
     where: {
       user_id: user_id,
       comment_id: comment_id,
@@ -84,4 +70,18 @@ const deleteUserReactionOnComment = async (
       }
     })
     .catch(() => response.status(400).send('Bad Request'))
+}
+
+export function commentReactionsRouter(router: Router) {
+  router.get('/topic/:topic_id/comments/:comment_id/reactions', (req, res) =>
+    getCommentReactions(req, res)
+  )
+  router.put(
+    '/topic/:topic_id/comments/:comment_id/reactions/put',
+    (req, res) => putCommentReaction(req, res)
+  )
+  router.delete(
+    '/topic/:topic_id/comments/:comment_id/reactions/delete',
+    (req, res) => deleteUserReactionOnComment(req, res)
+  )
 }
