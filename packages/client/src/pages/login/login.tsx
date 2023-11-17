@@ -1,45 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Form, Input } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import ErrorMessage from '@components/ErrorMesage/ErrorMessage'
-import { postLoginUser, SignInType } from '@/api/auth'
-import { urls } from '@/utils/navigation'
-import classes from '../signUp/styles.module.less'
-import TetrisImg from '../../components/TetrisImg/Tetris'
 import { getServiceId, getYandexUrl } from '@/api/oauth'
-import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
 import useAction from '@/hooks/useAction'
-import { useForm } from 'antd/lib/form/Form'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
+import { urls } from '@/utils/navigation'
+import ErrorMessage from '@components/ErrorMesage/ErrorMessage'
+import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
+import { Button, Form, Input } from 'antd'
+import { useForm } from 'antd/lib/form/Form'
+import React, { useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import TetrisImg from '../../components/TetrisImg/Tetris'
+import classes from '../signUp/styles.module.less'
 
 const Login: React.FC = () => {
-  const [authError, setAuthError] = useState<string | null>(null)
   const navigate = useNavigate()
   const [form] = useForm()
 
   const { GetAuth } = useAction()
 
-  const {
-    User: { user, loading },
-  } = useTypedSelector(state => state)
-  console.log(`loading`, loading)
+  const { user, loading, errorMessage } = useTypedSelector(state => state.User)
 
-  // useEffect(() => {
-  //   console.log(`USER IN UI`, state)
-  // }, [state])
+  useEffect(() => {
+    if (user) {
+      navigate(urls.home)
+    }
+  }, [user])
 
   const submitForm = useCallback(async () => {
     const { login, password } = await form.validateFields()
     if (login && password) {
       GetAuth(login, password)
-      // setAuthError(null)
-      // postLoginUser({ login, password })
-      //   .then(() => {
-      //     navigate(urls.home)
-      //   })
-      //   .catch(({ error }) => {
-      //     setAuthError(error.description)
-      //   })
     }
   }, [])
 
@@ -64,6 +53,7 @@ const Login: React.FC = () => {
           <Form onFinish={submitForm} form={form}>
             <Form.Item
               labelCol={{ span: 24 }}
+              required={false}
               colon={false}
               label={<span>Login</span>}
               rules={[
@@ -78,6 +68,7 @@ const Login: React.FC = () => {
             <Form.Item
               labelCol={{ span: 24 }}
               colon={false}
+              required={false}
               rules={[
                 {
                   required: true,
@@ -88,26 +79,27 @@ const Login: React.FC = () => {
               name="password">
               <Input placeholder="Password" type="password" />
             </Form.Item>
-            <ErrorMessage message={authError} />
+            <ErrorMessage message={errorMessage} />
             <Button
+              loading={loading}
               className={classes.signUp__btn}
-              type="submit"
+              htmlType="submit"
               style={{
                 width: '100%',
               }}>
               Login
             </Button>
           </Form>
-          <button
+          <Button
             onClick={oAuth}
             className={classes.yandex_button}
             style={{
               width: '100%',
             }}>
             Login via Yandex
-          </button>
+          </Button>
           <Button
-            href={urls.signup}
+            onClick={() => navigate(urls.signup)}
             type="link"
             style={{
               width: '100%',

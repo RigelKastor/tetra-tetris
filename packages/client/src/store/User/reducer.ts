@@ -4,7 +4,8 @@ import { UserAction } from './interfaces'
 export type UserStateT = {
   user?: UserType | null
   loading?: boolean
-  theme?: 'light' | 'dark'
+  theme?: 'light' | 'default'
+  errorMessage?: string
 }
 
 const UserState: UserStateT = { user: null }
@@ -18,8 +19,12 @@ export const UserReducer = (
       return { ...state, loading: true }
     case 'INIT_SESSION':
       return { ...state, user: action.user, loading: false }
-    // case 'RECIEVE_SESSION':
-    //   return { ...state, loading: false }
+    case 'LOGOUT_SESSION':
+      return { ...state, user: null, errorMessage: '' }
+    case 'CHECK_SESSION_FAIL':
+      return { ...state, loading: false }
+    case 'ERROR_SESSION':
+      return { ...state, errorMessage: action.errorMessage, loading: false }
     default:
       return state
   }

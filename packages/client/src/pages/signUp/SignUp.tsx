@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import classes from './styles.module.less'
 import { Form, Input, Button } from 'antd'
 import Tetris from '@/components/TetrisImg/Tetris'
@@ -8,18 +8,31 @@ import useMessage from 'antd/lib/message/useMessage'
 import { useNavigate } from 'react-router-dom'
 import { urls } from '@/utils/navigation'
 import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
+import useAction from '@/hooks/useAction'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 const SignUp: React.FC = () => {
   const [form] = useForm()
   const [messageApi] = useMessage()
   const navigate = useNavigate()
+
+  const { SignUp } = useAction()
+  const { user, errorMessage } = useTypedSelector(state => state.User)
+
+  useEffect(() => {
+    if (errorMessage) {
+      messageApi.error(errorMessage)
+    }
+  }, [errorMessage])
+
+  useEffect(() => {
+    if (user) {
+      navigate(urls.home)
+    }
+  }, [user])
+
   const signUp = useCallback((values: NewUser) => {
-    postSignUp(values)
-      .then(() => navigate(urls.home))
-      .catch(reason => {
-        console.log(reason)
-        messageApi.error('Could not create new user', 2)
-      })
+    SignUp(values)
   }, [])
   return (
     <>
@@ -73,18 +86,18 @@ const SignUp: React.FC = () => {
               name="password">
               <Input placeholder="Password" type="password" />
             </Form.Item>
-            <button
-              type="submit"
+            <Button
+              htmlType="submit"
               className={classes.signUp__btn}
               style={{
                 width: '100%',
               }}>
               Create account
-            </button>
+            </Button>
           </Form>
           <Button
             type="link"
-            href={urls.login}
+            onClick={() => navigate(urls.login)}
             style={{
               width: '100%',
             }}>

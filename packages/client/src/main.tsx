@@ -24,7 +24,8 @@ if ('serviceWorker' in navigator && !(import.meta as any).env.DEV) {
 }
 
 // @ts-ignore
-const store = initStore(window.__PRELOADED_STATE__)
+
+const store = initStore(JSON.parse(window.__PRELOADED_STATE__))
 
 // @ts-ignore
 delete window.__PRELOADED_STATE__
@@ -35,7 +36,7 @@ ReactDOM.hydrateRoot(
     <BrowserRouter>
       <App />
       {/* Удалить, пример работы с беком */}
-      <GETTopicsEXAMPLE />
+      {/* <GETTopicsEXAMPLE /> */}
     </BrowserRouter>
   </Provider>
 )

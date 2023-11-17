@@ -7,7 +7,7 @@ import { initStore } from './src/store/store'
 
 async function render(uri: string) {
   const store = initStore({
-    User: { theme: 'dark' },
+    User: { theme: 'default' },
   })
   const initialState = store.getState()
   const renderResult = renderToString(

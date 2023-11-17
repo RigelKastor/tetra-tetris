@@ -1,68 +1,73 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { ErrorType } from '@/api/getApiError'
 import {
   UserContextProvider,
   UserTheme,
 } from '@/providers/userProvider/UserProvider'
-import { urls } from '@/utils/navigation'
 import { UserType } from '@components/types'
-import Preloader from '@components/Preloader/Preloader'
+import React, { useEffect, useState } from 'react'
+import useAction from './hooks/useAction'
+import { useTypedSelector } from './hooks/useTypedSelector'
 import AppRouters from './routers'
-import { getUserInfo } from './api/auth'
-import { signInWithYandex } from './api/oauth'
-import useMessage from 'antd/lib/message/useMessage'
 
 function App() {
-  const [getUserError, setGetUserError] = useState<ErrorType | null>()
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
-  const [theme, setTheme] = useState<UserTheme>({} as UserTheme)
-  const [isFetcing, setIsFetching] = useState(true)
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [message] = useMessage()
+  const [themeState, setThemeState] = useState<UserTheme>({} as UserTheme)
+  // const location = useLocation()
 
-  const activePage = location.pathname.substring(1).split('/')[0]
+  // const activePage = location.pathname.substring(1).split('/')[0]
+
+  const { theme } = useTypedSelector(state => state.User)
+  const { CheckSession } = useAction()
 
   useEffect(() => {
-    const yandexAuth = () => {
-      const code = new URLSearchParams(location.search).get('code')
-      if (code) {
-        return signInWithYandex(code)
-      } else return Promise.resolve()
+    if (theme) {
+      setThemeState(theme)
     }
-    const fetchUserInfo = async () => {
-      await getUserInfo().then(result => {
-        setUserInfo(result)
-        if (activePage === 'login' || activePage === 'registration') {
-          navigate(urls.home)
-        }
-        setIsFetching(false)
-      })
+  }, [theme])
+
+  useEffect(() => {
+    CheckSession()
+    const bodyThemeElement = document.querySelector('body')
+    if (bodyThemeElement) {
+      bodyThemeElement.setAttribute('theme-mode', theme as string)
     }
-    yandexAuth()
-      .then(() => fetchUserInfo())
-      .catch(error => {
-        if (activePage !== 'login' && activePage !== 'registration') {
-          navigate(urls.login)
-        }
-        setGetUserError(error)
-        setIsFetching(false)
-      })
+  }, [])
+
+  // тут надо связать oauth через редакс
+  useEffect(() => {
+    // const yandexAuth = () => {
+    //   const code = new URLSearchParams(location.search).get('code')
+    //   if (code) {
+    //     return signInWithYandex(code)
+    //   } else return Promise.resolve()
+    // }
+    // const fetchUserInfo = async () => {
+    //   await getUserInfo().then(result => {
+    //     setUserInfo(result)
+    //     if (activePage === 'login' || activePage === 'registration') {
+    //       navigate(urls.home)
+    //     }
+    //     setIsFetching(false)
+    //   })
+    // }
+    // yandexAuth()
+    //   .then(() => fetchUserInfo())
+    //   .catch(error => {
+    //     if (activePage !== 'login' && activePage !== 'registration') {
+    //       navigate(urls.login)
+    //     }
+    //     setGetUserError(error)
+    //     setIsFetching(false)
+    //   })
   }, [])
 
   return (
     <React.StrictMode>
       <UserContextProvider
         user={userInfo}
-        settingsTheme={theme}
+        settingsTheme={themeState}
         setUser={setUserInfo}
-        setTheme={setTheme}>
-        {isFetcing ? (
-          <Preloader />
-        ) : (
-          <AppRouters error={getUserError?.error?.code || 401} />
-        )}
+        setTheme={setThemeState}>
+        <AppRouters error={401} />
       </UserContextProvider>
     </React.StrictMode>
   )

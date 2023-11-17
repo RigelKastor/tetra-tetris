@@ -103,7 +103,6 @@ async function startServer() {
 
       // Inject the app-rendered HTML into the template.
       const initStateSerialized = JSON.stringify(initialState)
-      console.log(`initStateSerialized `, initStateSerialized)
       const html = template
         .replace('<!--ssr-outlet-->', reactHtml)
         .replace('<!--store-data-->', initStateSerialized)

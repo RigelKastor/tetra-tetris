@@ -12,8 +12,25 @@ export interface initSessionI {
 
 export interface receiveSessionI {
   type: UserActionType.RECIEVE_SESSION
-  // access_token: string;
-  // user: userT;
 }
 
-export type UserAction = requestSessionI | initSessionI | receiveSessionI
+export interface logoutSessionI {
+  type: UserActionType.LOGOUT_SESSION
+}
+
+export interface checkSessionFail {
+  type: UserActionType.CHECK_SESSION_FAIL
+}
+
+export interface errorSessionI {
+  type: UserActionType.ERROR_SESSION
+  errorMessage: string
+}
+
+export type UserAction =
+  | requestSessionI
+  | initSessionI
+  | receiveSessionI
+  | logoutSessionI
+  | checkSessionFail
+  | errorSessionI
