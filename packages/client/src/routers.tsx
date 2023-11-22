@@ -16,7 +16,6 @@ type AppRoutersType = {
 }
 
 const AppRouters = ({ error }: AppRoutersType) => {
-  console.log('=error', error)
   return (
     <Routes>
       <Route path={urls.home} element={<Presentation />} />

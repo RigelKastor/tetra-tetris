@@ -23,6 +23,7 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
       port: Number(POSTGRES_PORT),
       dialect: 'postgres',
     }
+
     const sequelize = new Sequelize(sequelizeOptions)
 
     const res = await sequelize.query('SELECT NOW()')
@@ -37,7 +38,7 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
     ])
     await sequelize.sync()
 
-    // ############### код нижу будет удалён
+    // ############### код ниже будет удалён
 
     //удаляю ранее созданных юзеров и обнуляю id для тестовых топиков
     await UserModel.destroy({ where: {} })

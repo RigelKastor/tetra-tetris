@@ -1,12 +1,12 @@
-import { useContext, useMemo, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import classNames from 'classnames'
+import useAction from '@/hooks/useAction'
+import { urls } from '@/utils/navigation'
 import Avatar from '@components/Avatar/Avatar'
 import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
-import { urls } from '@/utils/navigation'
+import classNames from 'classnames'
+import { useEffect, useMemo, useState } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import classes from './styles.module.less'
-import UserContext from '@/providers/userProvider/UserContext'
-import { postLogout } from '@/api/auth'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 const cx = classNames.bind(classes)
 
@@ -34,12 +34,14 @@ const menuList = [
 ]
 
 const Header = () => {
+  const location = useLocation()
+
   const activePage =
-    window.location.pathname === '/'
+    location.pathname === '/'
       ? 'index'
-      : window.location.pathname.substring(1).split('/')[0]
+      : location.pathname.substring(1).split('/')[0]
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const { user } = useContext(UserContext)
+  // const { user } = useContext(UserContext)
   const navigate = useNavigate()
   const menu = useMemo(
     () =>
@@ -50,11 +52,20 @@ const Header = () => {
             ? classes['header__menu__item--active']
             : classes['header__menu__item--default'],
       })),
-    [activePage]
+    []
   )
 
+  const { LogoutSession } = useAction()
+  const { user } = useTypedSelector(state => state.User)
+
+  useEffect(() => {
+    if (!localStorage.getItem('user')) {
+      navigate(urls.login)
+    }
+  }, [])
+
   const handleLogout = async () => {
-    await postLogout()
+    await LogoutSession()
     navigate(urls.login)
   }
 

@@ -14,7 +14,7 @@ import { Theme } from './types'
   paranoid: true,
   tableName: 'users',
 })
-export default class UserModal extends Model<UserModal> {
+export default class UserModel extends Model<UserModel> {
   @PrimaryKey
   @AllowNull(false)
   @AutoIncrement
