@@ -29,3 +29,9 @@ export type TopicType = {
   theme: string
   body: string
 }
+
+export type CommentType = {
+  id: number
+  user_id: number
+  body: string
+}

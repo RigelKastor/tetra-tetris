@@ -1,4 +1,4 @@
-import { TopicType } from '@/components/types'
+import { CommentType, TopicType } from '@/components/types'
 import { localApi } from './setupApi'
 
 export const getAllTopics = () => {
@@ -14,4 +14,8 @@ export const postNewTopic = (
     theme: theme,
     body: commment,
   })
+}
+
+export const getAllComments = (topicId: number) => {
+  return localApi.get<CommentType[]>('/comments/' + topicId)
 }
