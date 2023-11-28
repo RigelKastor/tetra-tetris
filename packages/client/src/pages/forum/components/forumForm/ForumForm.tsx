@@ -1,15 +1,37 @@
 import { Form, Input } from 'antd'
 import classes from './styles.module.less'
 import { useTopic } from '@/providers/TopicContext'
+import { useCallback } from 'react'
+import { useForm } from 'antd/lib/form/Form'
+import { postNewTopic } from '@/api/forumApi'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 const ForumForm: React.FC = () => {
-  const { topicId } = useTopic()
+  const { topicId, setTopicId } = useTopic()
+  const [postForm] = useForm()
+  const { user } = useTypedSelector(state => state.User)
+  const newPost = useCallback(() => {
+    if (!topicId) {
+      const body = postForm.getFieldValue('comment')
+      const theme = postForm.getFieldValue('theme')
+      if (!user) {
+        return
+      }
+      postNewTopic(theme, body, user.id)
+        .then(response => {
+          if (setTopicId) {
+            setTopicId(response.data.id)
+          }
+        })
+        .catch(reason => console.log(reason))
+    }
+  }, [])
   return (
     <div className={classes.forum__form}>
       {!topicId && (
         <span className={classes.forum__formTitle}>Create New Forum </span>
       )}
-      <Form>
+      <Form form={postForm} onFinish={newPost}>
         {!topicId && (
           <Form.Item
             labelCol={{ span: 24 }}
@@ -17,7 +39,7 @@ const ForumForm: React.FC = () => {
             label={
               <span className={classes.forum__formItemTitle}>Forum name</span>
             }>
-            <Form.Item name="forumName" noStyle>
+            <Form.Item name="theme" noStyle>
               <Input placeholder="Forum name" />
             </Form.Item>
 
@@ -38,8 +60,8 @@ const ForumForm: React.FC = () => {
             Maximum length 300 symblols
           </span>
         </Form.Item>
-        <button className={classes.forum__formBtn}>
-          {!topicId ? 'Login' : 'Send'}
+        <button className={classes.forum__formBtn} type="submit">
+          {!topicId ? 'Post new topic' : 'Post new comment'}
         </button>
       </Form>
     </div>

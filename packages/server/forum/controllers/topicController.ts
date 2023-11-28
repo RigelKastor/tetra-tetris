@@ -14,10 +14,10 @@ const getTopics = (res: Response) => {
 }
 
 const getTopic = (req: Request, res: Response) => {
-  const { id } = req.params
+  const { topic_id } = req.params
   TopicModel.findAll({
     where: {
-      id,
+      id: +topic_id,
     },
     include: {
       model: CommentModel,
@@ -33,13 +33,8 @@ const getTopic = (req: Request, res: Response) => {
 }
 
 const postTopic = (req: Request, res: Response) => {
-  const {
-    user: { id },
-  } = res.locals
-
   TopicModel.create({
     ...req.body,
-    uid: id,
   })
     .then(topic => {
       TopicModel.findOne({

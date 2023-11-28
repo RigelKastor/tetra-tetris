@@ -22,3 +22,10 @@ export type LeaderUserType = {
 export type GameType = {
   score: number
 }
+
+export type TopicType = {
+  id: number
+  uid: number
+  theme: string
+  body: string
+}

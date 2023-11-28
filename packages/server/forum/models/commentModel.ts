@@ -10,7 +10,6 @@ import {
   Table,
 } from 'sequelize-typescript'
 import TopicModel from './topicModel'
-import UserModel from './userModel'
 
 @Table({
   timestamps: true,
@@ -24,9 +23,8 @@ export default class CommentModel extends Model<CommentModel> {
   @Column(DataType.INTEGER)
   public override id: number
 
-  @ForeignKey(() => UserModel)
   @Column(DataType.INTEGER)
-  uid: number
+  user_id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)

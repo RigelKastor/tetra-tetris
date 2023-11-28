@@ -40,3 +40,20 @@ export const getYandexClientApi = (): AxiosInstance => {
 }
 
 export const yandexApi = getYandexClientApi()
+
+const getLocalApi = (): AxiosInstance => {
+  const apiClient = axios.create()
+  //const activePage = window?.location.pathname.substring(1).split('/')[0]
+  apiClient.defaults.baseURL = 'http://localhost:3000'
+  apiClient.defaults.withCredentials = true
+  apiClient.defaults.validateStatus = status => status >= 200 && status < 300
+  apiClient.interceptors.response.use(
+    response => response,
+    (error: AxiosError<DataErrorType>) => {
+      return Promise.reject(getApiError(error))
+    }
+  )
+  return apiClient
+}
+
+export const localApi = getLocalApi()
