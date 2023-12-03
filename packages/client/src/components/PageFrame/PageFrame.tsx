@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import classNames from 'classnames'
 import Header from '@components/Header/Header'
 import classes from './styles.module.less'

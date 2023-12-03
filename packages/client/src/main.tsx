@@ -1,9 +1,12 @@
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+import { Provider } from 'react-redux'
+import { initStore } from './store/store'
 import '@styles/styles.less'
+import GETTopicsEXAMPLE from './GETTopicsEXAMPLE'
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && !(import.meta as any).env.DEV) {
   window.addEventListener('load', () => {
     const SW = new URL('../sw.js', import.meta.url).href
     navigator.serviceWorker
@@ -20,8 +23,20 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+// @ts-ignore
+
+const store = initStore(JSON.parse(window.__PRELOADED_STATE__))
+
+// @ts-ignore
+delete window.__PRELOADED_STATE__
+
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+      {/* Удалить, пример работы с беком */}
+      {/* <GETTopicsEXAMPLE /> */}
+    </BrowserRouter>
+  </Provider>
 )
