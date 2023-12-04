@@ -1,14 +1,7 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classes from './styles.module.less'
 import { Button, ColProps, Form, Input, Modal } from 'antd'
 import Avatar from '@/components/Avatar/Avatar'
-import UserContext from '@/providers/userProvider/UserContext'
 import { useForm } from 'antd/lib/form/Form'
 import {
   PasswordRequest,
@@ -20,6 +13,7 @@ import { ChangeAvatar } from '@/components/ChangeAvatar/ChangeAvatar'
 import PageFrame from '@/components/PageFrame/PageFrame'
 import { validate } from '@/utils/validators'
 import { RuleObject } from 'antd/es/form'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 interface FieldData {
   name: string | number | (string | number)[]
@@ -43,7 +37,7 @@ function ObjectToFieldData<T extends Record<string, unknown>>(
 }
 
 const Profile: React.FC = () => {
-  const { user } = useContext(UserContext)
+  const { user } = useTypedSelector(state => state.User)
   const [avatar, setAvatar] = useState('')
   const [profileFields, setProfileFields] = useState<FieldData[]>()
   const [isModalOpen, setIsModalOpen] = useState(false)

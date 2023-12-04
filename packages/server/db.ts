@@ -38,25 +38,6 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
     ])
     await sequelize.sync()
 
-    // ############### код ниже будет удалён
-
-    //удаляю ранее созданных юзеров и обнуляю id для тестовых топиков
-    await UserModel.destroy({ where: {} })
-    await UserModel.sequelize!.query(
-      'ALTER SEQUENCE users_id_seq RESTART WITH 1'
-    )
-
-    // добавляю тестовых юзеров
-    sequelize.query(
-      "INSERT INTO users (login, name, avatar, theme) VALUES ('kochanov@yandex.ru', 'Andrey', 'avaLink', 'light'), ('semen@yandex.ru', 'Semen', 'avaLink', 'dark')"
-    )
-
-    // добавляю тестовые топики
-
-    sequelize.query(
-      "INSERT INTO topics (theme, body, uid) VALUES ('Как набрать 1000 очков', 'Есть ли какой-то лайфхак?', 1), ('Игровой гайд', 'LOREM IPSUM BLA BLA BLA', 2);"
-    )
-    // ###########################################
     return sequelize
   } catch (e) {
     console.error(e)
