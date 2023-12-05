@@ -1,3 +1,5 @@
+import { canUseDOM } from '@/utils/canUseDom'
+
 enum shapeColors {
   YELLOW = '#F6C448',
   BLUE = '#0A4DAE',
@@ -103,11 +105,13 @@ class CanvasAPI {
   }
 
   private setListeners() {
-    document.addEventListener('keydown', e => {
-      e.preventDefault()
-      this.moveObject(e)
-      this.rotateObject(e)
-    })
+    if (canUseDOM) {
+      document.addEventListener('keydown', e => {
+        e.preventDefault()
+        this.moveObject(e)
+        this.rotateObject(e)
+      })
+    }
   }
 
   private drawPiece(color: string, positionX: number, positionY: number) {

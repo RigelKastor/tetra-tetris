@@ -8,6 +8,7 @@ import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
 import { saveGameResult } from '@/api/leaderboardApi'
 import { exitFullscreen, requestFullscreen } from '@/utils/requestFullscreen'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
+import { canUseDOM } from '@/utils/canUseDom'
 
 const Game: React.FC = () => {
   const [startCountdown, setStartCountdown] = useState<number | string>(3)
@@ -19,6 +20,7 @@ const Game: React.FC = () => {
   const { user } = useTypedSelector(state => state.User)
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const divRef = useRef<HTMLDivElement>(null)
   const gameApi = useGameApi({
     element: canvasRef.current as HTMLCanvasElement,
     setScore: setGameScore,
@@ -41,9 +43,10 @@ const Game: React.FC = () => {
         }
       }
     }
-
-    document.addEventListener('keydown', onFullScreenChanged)
-    return () => document.removeEventListener('keydown', onFullScreenChanged)
+    if (canUseDOM) {
+      document.addEventListener('keydown', onFullScreenChanged)
+      return () => document.removeEventListener('keydown', onFullScreenChanged)
+    }
   }, [])
 
   useEffect(() => {
@@ -133,7 +136,9 @@ const Game: React.FC = () => {
 
   return (
     <PageFrame pageType="game">
-      <div className={classes.game}>{content}</div>
+      <div className={classes.game} ref={divRef}>
+        {content}
+      </div>
     </PageFrame>
   )
 }
