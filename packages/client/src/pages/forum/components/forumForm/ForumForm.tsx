@@ -5,9 +5,11 @@ import { useCallback } from 'react'
 import { useForm } from 'antd/lib/form/Form'
 import { postNewTopic } from '@/api/forumApi'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
+import useAction from '@/hooks/useAction'
 
 const ForumForm: React.FC = () => {
   const { topicId, setTopicId } = useTopic()
+  const { OpenTopic } = useAction()
   const [postForm] = useForm()
   const { user } = useTypedSelector(state => state.User)
   const newPost = useCallback(() => {
@@ -20,6 +22,7 @@ const ForumForm: React.FC = () => {
       postNewTopic(theme, body, user.id)
         .then(response => {
           if (setTopicId) {
+            OpenTopic(response.data)
             setTopicId(response.data.id)
           }
         })

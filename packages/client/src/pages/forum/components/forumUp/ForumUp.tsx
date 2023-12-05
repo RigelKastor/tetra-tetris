@@ -3,12 +3,14 @@ import classes from './styles.module.less'
 import { RowProps } from 'antd'
 import ForumTopics from '../forumTopics/ForumTopics'
 import { useTopic } from '@/providers/TopicContext'
-import { getAllTopics } from '@/api/forumApi'
+import { getAllTopics, getTopic } from '@/api/forumApi'
 import { TopicType } from '@/components/types'
 import { useState, useEffect } from 'react'
+import useAction from '@/hooks/useAction'
 
 const ForumUp: React.FC = () => {
   const { topicId, setTopicId } = useTopic()
+  const { OpenTopic } = useAction()
   const [topics, setTopics] = useState<TopicType[]>()
   useEffect(() => {
     getAllTopics().then(t => setTopics(t.data))
@@ -40,6 +42,7 @@ const ForumUp: React.FC = () => {
       onRow={record => ({
         onClick: () => {
           if (setTopicId) {
+            getTopic(record.id).then(x => OpenTopic(x.data))
             setTopicId(record.id as number)
           }
         },

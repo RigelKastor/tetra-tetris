@@ -28,6 +28,7 @@ export type TopicType = {
   uid: number
   theme: string
   body: string
+  comments: CommentType[]
 }
 
 export type CommentType = {

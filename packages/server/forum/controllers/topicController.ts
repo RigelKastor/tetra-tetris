@@ -15,7 +15,7 @@ const getTopics = (res: Response) => {
 
 const getTopic = (req: Request, res: Response) => {
   const { topic_id } = req.params
-  TopicModel.findAll({
+  TopicModel.findOne({
     where: {
       id: +topic_id,
     },
@@ -27,7 +27,8 @@ const getTopic = (req: Request, res: Response) => {
     .then(topics => {
       res.status(200).json(topics)
     })
-    .catch(() => {
+    .catch(err => {
+      console.log(err)
       res.status(400).json({ message: 'Bad request' })
     })
 }

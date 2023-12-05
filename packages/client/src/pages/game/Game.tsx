@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import PageFrame from '@/components/PageFrame/PageFrame'
 import classes from './styles.module.less'
 import GameStartMenu from './components/GameStartMenu'
@@ -7,7 +7,7 @@ import useGameApi from '@/hooks/useGameApi'
 import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
 import { saveGameResult } from '@/api/leaderboardApi'
 import { exitFullscreen, requestFullscreen } from '@/utils/requestFullscreen'
-import UserContext from '@/providers/userProvider/UserContext'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 const Game: React.FC = () => {
   const [startCountdown, setStartCountdown] = useState<number | string>(3)
@@ -16,16 +16,15 @@ const Game: React.FC = () => {
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval>>()
   const [gameScore, setGameScore] = useState({ score: 0, speed: 0 })
   const [nextShape, setNextShape] = useState<string>()
-  const { user } = useContext(UserContext)
+  const { user } = useTypedSelector(state => state.User)
+
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const gameApi = useGameApi({
-    element: document.querySelector('canvas') as HTMLCanvasElement,
+    element: canvasRef.current as HTMLCanvasElement,
     setScore: setGameScore,
     setGameEnd: setIsGameEnded,
     setNextShape: setNextShape,
   })
-
-  const canvasRef = useRef(null)
-
   useEffect(() => {
     let fullScreen = false
     function onFullScreenChanged(ev: KeyboardEvent) {

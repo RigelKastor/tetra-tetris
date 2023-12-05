@@ -9,7 +9,7 @@ export const postNewTopic = (
   commment: string,
   user_id: number
 ) => {
-  return localApi.post('/topics', {
+  return localApi.post<TopicType>('/topics', {
     user_id: user_id,
     theme: theme,
     body: commment,
@@ -18,4 +18,8 @@ export const postNewTopic = (
 
 export const getAllComments = (topicId: number) => {
   return localApi.get<CommentType[]>('/comments/' + topicId)
+}
+
+export const getTopic = (topicId: number) => {
+  return localApi.get('/topics/' + topicId)
 }
