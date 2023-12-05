@@ -22,3 +22,17 @@ export type LeaderUserType = {
 export type GameType = {
   score: number
 }
+
+export type TopicType = {
+  id: number
+  uid: number
+  theme: string
+  body: string
+  comments: CommentType[]
+}
+
+export type CommentType = {
+  id: number
+  user_id: number
+  body: string
+}

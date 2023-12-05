@@ -1,55 +1,20 @@
 import Table from 'rc-table'
 import classes from './styles.module.less'
-import avatar from '../../../../../public/user.svg'
 import { RowProps } from 'antd'
 import ForumTopics from '../forumTopics/ForumTopics'
 import { useTopic } from '@/providers/TopicContext'
+import { getAllTopics, getTopic } from '@/api/forumApi'
+import { TopicType } from '@/components/types'
+import { useState, useEffect } from 'react'
+import useAction from '@/hooks/useAction'
 
-const tableItems = [
-  {
-    label: 'Competitions',
-    topics: 12,
-    posts: 12,
-    id: 1,
-    lastPost: {
-      date: '1monts, 2 weeks ago',
-      author: 'Lem Stanislav',
-    },
-  },
-  {
-    label: 'Topic 1',
-    topics: 12,
-    posts: 12,
-    id: 2,
-    lastPost: {
-      date: '1monts, 2 weeks ago',
-      author: 'Lem Stanislav',
-    },
-  },
-  {
-    label: 'Topic 2',
-    id: 3,
-    topics: 12,
-    posts: 12,
-    lastPost: {
-      date: '1monts, 2 weeks ago',
-      author: 'Lem Stanislav',
-    },
-  },
-  {
-    label: 'Topic 3',
-    topics: 12,
-    posts: 12,
-    id: 4,
-    lastPost: {
-      date: '1monts, 2 weeks ago',
-      author: 'Lem Stanislav',
-    },
-  },
-]
 const ForumUp: React.FC = () => {
   const { topicId, setTopicId } = useTopic()
-
+  const { OpenTopic } = useAction()
+  const [topics, setTopics] = useState<TopicType[]>()
+  useEffect(() => {
+    getAllTopics().then(t => setTopics(t.data))
+  }, [])
   if (topicId) {
     return <ForumTopics />
   }
@@ -77,52 +42,24 @@ const ForumUp: React.FC = () => {
       onRow={record => ({
         onClick: () => {
           if (setTopicId) {
+            getTopic(record.id).then(x => OpenTopic(x.data))
             setTopicId(record.id as number)
           }
         },
       })}
       columns={[
         {
-          title: 'Forum',
-          dataIndex: 'label',
-          key: 'label',
+          title: 'Theme',
+          dataIndex: 'theme',
+          key: 'theme',
         },
         {
-          title: 'Topics',
-          dataIndex: 'topics',
-          key: 'topics',
-          render(value) {
-            return <span className={classes.forum__count}>{value}</span>
-          },
-        },
-        {
-          title: 'Posts',
-          dataIndex: 'posts',
-          key: 'posts',
-          render(value) {
-            return <span className={classes.forum__count}>{value}</span>
-          },
-        },
-        {
-          title: 'Last Post',
-          dataIndex: 'lastPost',
-          key: 'lastPost',
-          render(value) {
-            return (
-              <div className={classes.forum__author}>
-                <span className={classes.forum__authorDate}>{value.date}</span>
-                <div className={classes.forum__authorInner}>
-                  <img src={avatar} alt="avatar" />
-                  <div className={classes.forum__authorName}>
-                    {value.author}
-                  </div>
-                </div>
-              </div>
-            )
-          },
+          title: 'Body',
+          dataIndex: 'body',
+          key: 'body',
         },
       ]}
-      data={tableItems}
+      data={topics}
     />
   )
 }

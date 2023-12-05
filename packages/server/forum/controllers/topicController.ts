@@ -14,10 +14,10 @@ const getTopics = (res: Response) => {
 }
 
 const getTopic = (req: Request, res: Response) => {
-  const { id } = req.params
-  TopicModel.findAll({
+  const { topic_id } = req.params
+  TopicModel.findOne({
     where: {
-      id,
+      id: +topic_id,
     },
     include: {
       model: CommentModel,
@@ -27,19 +27,15 @@ const getTopic = (req: Request, res: Response) => {
     .then(topics => {
       res.status(200).json(topics)
     })
-    .catch(() => {
+    .catch(err => {
+      console.log(err)
       res.status(400).json({ message: 'Bad request' })
     })
 }
 
 const postTopic = (req: Request, res: Response) => {
-  const {
-    user: { id },
-  } = res.locals
-
   TopicModel.create({
     ...req.body,
-    uid: id,
   })
     .then(topic => {
       TopicModel.findOne({

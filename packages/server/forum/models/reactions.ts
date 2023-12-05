@@ -8,7 +8,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript'
-import { Comment } from './comment'
+import CommentModel from './commentModel'
 
 export type Reaction = 'like' | 'dislike'
 
@@ -57,7 +57,7 @@ export default class CommentReactionModel extends Model<CommentReactionModel> {
   @Column(DataType.INTEGER)
   user_id: number
 
-  @ForeignKey(() => Comment)
+  @ForeignKey(() => CommentModel)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   comment_id: number

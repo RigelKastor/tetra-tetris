@@ -1,10 +1,8 @@
 import {
   AllowNull,
   AutoIncrement,
-  BelongsTo,
   Column,
   DataType,
-  ForeignKey,
   HasMany,
   Model,
   PrimaryKey,
@@ -12,7 +10,6 @@ import {
 } from 'sequelize-typescript'
 
 import CommentModel from './commentModel'
-import UserModel from './userModel'
 import TopicReactionModel from './reactions'
 
 @Table({
@@ -31,14 +28,8 @@ export default class TopicModel extends Model<TopicModel> {
   @Column(DataType.STRING)
   theme: string
 
-  @ForeignKey(() => UserModel)
   @Column(DataType.INTEGER)
-  uid: number
-
-  @BelongsTo(() => UserModel, {
-    onDelete: 'CASCADE',
-  })
-  parent: UserModel
+  user_id: number
 
   @AllowNull(false)
   @Column(DataType.STRING)
