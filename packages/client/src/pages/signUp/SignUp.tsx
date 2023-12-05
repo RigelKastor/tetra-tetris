@@ -10,6 +10,8 @@ import { urls } from '@/utils/navigation'
 import SwitchTheme from '@components/SwitchTheme/SwitchTheme'
 import useAction from '@/hooks/useAction'
 import { useTypedSelector } from '@/hooks/useTypedSelector'
+import { RuleObject } from 'antd/lib/form'
+import { validate } from '@/utils/validators'
 
 const SignUp: React.FC = () => {
   const [form] = useForm()
@@ -48,42 +50,84 @@ const SignUp: React.FC = () => {
               labelCol={{ span: 24 }}
               colon={false}
               label={<span>First name</span>}
-              name="first_name">
+              name="first_name"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('name', value)
+                  },
+                },
+              ]}>
               <Input placeholder="First name" />
             </Form.Item>
             <Form.Item
               labelCol={{ span: 24 }}
               colon={false}
               label={<span>Second name</span>}
-              name="second_name">
+              name="second_name"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('name', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Second name" />
             </Form.Item>
             <Form.Item
               labelCol={{ span: 24 }}
               colon={false}
               label={<span>Login</span>}
-              name="login">
+              name="login"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('login', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Login" />
             </Form.Item>
             <Form.Item
               labelCol={{ span: 24 }}
               colon={false}
               label={<span>Email</span>}
-              name="email">
+              name="email"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('email', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Email" type="email" />
             </Form.Item>
             <Form.Item
               labelCol={{ span: 24 }}
               colon={false}
               label={<span>Phone</span>}
-              name="phone">
+              name="phone"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('phone', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Phone" />
             </Form.Item>
             <Form.Item
               labelCol={{ span: 24 }}
               colon={false}
               label={<span>Password</span>}
-              name="password">
+              name="password"
+              rules={[
+                {
+                  validator: (_: RuleObject, value) => {
+                    return validate('password', value)
+                  },
+                },
+              ]}>
               <Input placeholder="Password" type="password" />
             </Form.Item>
             <Button

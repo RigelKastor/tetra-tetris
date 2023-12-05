@@ -36,7 +36,8 @@ export const createClientAndConnect = async (): Promise<Sequelize | null> => {
       TopicReactionModel,
       CommentReactionModel,
     ])
-    await sequelize.sync({ force: true })
+    await sequelize.sync()
+
     return sequelize
   } catch (e) {
     console.error(e)
