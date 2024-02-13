@@ -10,7 +10,9 @@ const cx = classNames.bind(classes)
 interface GameStartMenuI {
   setIsGameStarted: (a: boolean) => void
   setStartCountdown: React.Dispatch<React.SetStateAction<string | number>>
-  setIntervalId: React.Dispatch<React.SetStateAction<NodeJS.Timer | undefined>>
+  setIntervalId: React.Dispatch<
+    React.SetStateAction<NodeJS.Timeout | undefined>
+  >
 }
 
 const GameStartMenu: React.FC<GameStartMenuI> = ({

@@ -4,7 +4,10 @@ import classes from './styles.module.less'
 import GameStartMenu from './components/GameStartMenu'
 import GameEnd from './components/GameEnd'
 import useGameApi from '@/hooks/useGameApi'
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary'
+import { saveGameResult } from '@/api/leaderboardApi'
 import { exitFullscreen, requestFullscreen } from '@/utils/requestFullscreen'
+import { useTypedSelector } from '@/hooks/useTypedSelector'
 
 const Game: React.FC = () => {
   const [startCountdown, setStartCountdown] = useState<number | string>(3)
@@ -13,15 +16,15 @@ const Game: React.FC = () => {
   const [intervalId, setIntervalId] = useState<ReturnType<typeof setInterval>>()
   const [gameScore, setGameScore] = useState({ score: 0, speed: 0 })
   const [nextShape, setNextShape] = useState<string>()
+  const { user } = useTypedSelector(state => state.User)
+
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const gameApi = useGameApi({
-    element: document.querySelector('canvas') as HTMLCanvasElement,
+    element: canvasRef.current as HTMLCanvasElement,
     setScore: setGameScore,
     setGameEnd: setIsGameEnded,
     setNextShape: setNextShape,
   })
-
-  const canvasRef = useRef(null)
-
   useEffect(() => {
     let fullScreen = false
     function onFullScreenChanged(ev: KeyboardEvent) {
@@ -59,6 +62,9 @@ const Game: React.FC = () => {
 
   const content = useMemo(() => {
     if (isGameEnded) {
+      if (user) {
+        saveGameResult(gameScore.score, user.id)
+      }
       return (
         <GameEnd setIsGameRestarted={restartGame} score={gameScore.score} />
       )
@@ -79,17 +85,19 @@ const Game: React.FC = () => {
         {startCountdown && (
           <span className={classes.game__countdown}>{startCountdown}</span>
         )}
-        <canvas
-          ref={canvasRef}
-          width="420"
-          height="600"
-          className={classes.game__field}
-        />
+        <ErrorBoundary fallback={<p>Игра не доступна</p>}>
+          <canvas
+            ref={canvasRef}
+            width="420"
+            height="600"
+            className={classes.game__field}
+          />
+        </ErrorBoundary>
         <div className={classes.game__score}>
           <button
             className={classes.game__btnBack}
             onClick={() => {
-              restartGame()
+              setIsGameEnded(true)
               gameApi?.gameOver()
             }}>
             Выйти

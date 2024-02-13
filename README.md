@@ -52,6 +52,18 @@
 Так же реализована работа с service workers. Это позволяет запускть игру в offline режиме.
 
 
+### Запуск SSR
+
+https://www.youtube.com/watch?v=alHKbgJnnXw&ab_channel=Upskilling
+
+1. Зайти в pages/сlient
+2. Сбилдить для клиента (yarn buld)
+3. Сбилдить для ssr (yarn build:ssr)
+4. Если не сделана ссылка на пакет с клиентом, сделать. (yarn link)
+5. Перейти в pages/server 
+6. Установить пакеты включая клиент. (yarn link client)
+7. Запустить дев режим (yarn dev)
+
 ## Technical
 
 ### Как запускать?

@@ -10,13 +10,29 @@ export type UserType = {
   avatar: string | null
 }
 
+export type PositionType = 'first' | 'second' | 'third'
+
 export type LeaderUserType = {
-  avatar?: string
-  display_name: string
+  userId: number
+  avatar?: string | null
+  display_name: string | null
   score: number
-  position: 'first' | 'second' | 'third'
 }
 
 export type GameType = {
   score: number
+}
+
+export type TopicType = {
+  id: number
+  uid: number
+  theme: string
+  body: string
+  comments: CommentType[]
+}
+
+export type CommentType = {
+  id: number
+  user_id: number
+  body: string
 }
